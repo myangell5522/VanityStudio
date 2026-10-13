@@ -1,0 +1,185 @@
+UI: {
+	ButtonTip: Vanity Studio
+	SwitchToAchievements: Show the achievement advisor here
+	SwitchToStudio: Show the Vanity Studio button here
+	SlotHead: Head
+	SlotBody: Body
+	SlotLegs: Legs
+	SlotFront: Front
+	SlotBack: Back
+	NewName: New {0}
+	NamePlaceholder: Design name
+	TipSlot:
+		'''
+		What this is worn as.
+		Click for next, right-click for previous
+		'''
+	HideVanilla: Replace vanilla look
+	TipHideVanilla:
+		'''
+		Hide the vanilla sprite in this slot while the design is worn.
+		Your armor keeps all of its stats, only the look changes
+		'''
+	TipClose: Close (Esc). Everything is saved automatically
+	TipEquip: Wear this design
+	TipUnequip: Take this design off
+	TipExport: Export a vanilla-layout sprite sheet (.png) and a shareable .vsd file
+	TipImport: Import a .png sprite / sheet into a new layer, or open a .vsd design
+	TipFromEquipped: Copy the sprite of the armor or accessory you're showing in this slot into a new layer, so you can repaint it
+	TipSave: Save now (Ctrl+S)
+	TipLibrary: All your designs
+	TipUndo: Undo (Ctrl+Z)
+	TipRedo: Redo (Ctrl+Y)
+	Saved: Saved
+	Equipped: Wearing {0}
+	Exported: Exported {0}
+	ExportedChat: "[Vanity Studio] Exported to {0}"
+	ExportFailed: Export failed, see client.log
+	ImportTitle: Import into Vanity Studio
+	ImportFailed: Couldn't read that file
+	Imported: Imported {0}
+	ImportedEquipped: Copied {0} into a new layer
+	NothingEquipped: Nothing visible in the {0} slot to copy
+	TooManyLayers: Too many layers
+	ToolPencil: Pencil
+	ToolEraser: Eraser
+	ToolFill: Fill
+	ToolPicker: Color picker
+	ToolLine: Line
+	ToolRect: Rectangle (hold Shift to fill)
+	ToolMove: Move layer
+	TipBrush: Brush size ([ and ])
+	TipMirror: Mirror horizontally (M)
+	TipGrid: Pixel grid
+	TipReference: Show the character under the canvas ({0}%, scroll to change)
+	PoseBase: All poses
+	TipPoseBase: Draw once for every pose. The walk bob is added for you
+	PoseStand: Stand
+	PoseJump: Jump
+	PoseUse: Swing {0}
+	PoseWalk: Walk {0}
+	GroupUse: Swing
+	GroupWalk: Walk
+	TipPoseOverride: Has its own drawing. Right-click to go back to the base drawing
+	TipPoseInherit: Uses the base drawing. Draw here to give this pose its own version
+	UsingBase: showing base
+	TipLayerAdd: New layer
+	TipLayerDuplicate: Duplicate layer
+	TipLayerDelete: Delete layer
+	TipLayerUp: Move layer up
+	TipLayerDown: Move layer down
+	TipLayerMerge: Merge into the layer below
+	LayerName: Layer {0}
+	TipFrameAdd: New empty frame
+	TipFrameDuplicate: Duplicate frame
+	TipFrameDelete: Delete frame
+	TipFrameLeft: Move frame left
+	TipFrameRight: Move frame right
+	TipPlay: Play / pause (Enter)
+	TipOnion: Onion skin (O)
+	TipDuration: Frame duration. Scroll or click, Shift for bigger steps
+	All: All
+	TipDurationAll: Use this duration for every frame
+	Opacity: Opacity
+	TipVisible: Show / hide layer
+	TipRename: Double-click to rename
+	FrameN: frame {0}
+	FramesN: "{0} frames"
+	TipCelClear: Right-click to clear (only the selected pose)
+	TipTurn: Turn around
+	PvAuto: Auto
+	PvIdle: Idle
+	PvWalk: Walk
+	PvJump: Jump
+	PvFly: Fly
+	PvUse: Swing
+	PvPose: Pose
+	TipSwapColors: Swap colors (X)
+	Clear: Clear
+	TipTransparent: Transparent: paint with it to erase
+	RightClickHint: right click paints with the back color
+	CharacterColors: Your character
+	Recent: Recent
+	LibraryTitle: Designs ({0})
+	LibraryEmpty: Nothing here yet
+	OpenFolder: Open folder
+	ImportFile: Import...
+	NewFor: New:
+	TipOpen: Open in the editor
+	TipDuplicate: Duplicate
+	TipDelete: Delete
+	TipDeleteConfirm: Click again to delete for good
+	TipHelp: How does this work? (replays the walkthrough)
+	TipLayerFlip: Flip what's on screen horizontally. Shift: whole layer
+	TipLayerOutline: Add a 1px outline in the main color around the drawing. Shift: whole layer
+	HintPencil: LMB: main color, RMB: back color, Alt: pick color.
+	HintEraser: Click and drag to erase.
+	HintFill: Click to fill an area. Shift+click: replace that color everywhere.
+	HintPicker: LMB / RMB: take the color for the main / back slot.
+	HintLine: Drag to draw a straight line.
+	HintRect: Drag for a rectangle. Hold Shift to fill it.
+	HintMove: Drag to shift the whole drawing.
+	HintNav: Wheel: zoom · Middle mouse / Space+drag: pan · F: fit
+	TipPreview: Live preview (x{0}). Scroll to zoom
+	Show: Show:
+	FilterAll: All
+	TipNewFor: Start a new {0} design
+	Layers: Layers
+	TutDontShow: Don't show this again
+	TutNext: Next
+	TutBack: Back
+	TutSkip: Skip
+	TutFinish: Let's go!
+	TutWelcomeTitle: Welcome to Vanity Studio!
+	TutWelcome:
+		'''
+		Here you can draw your own hats, shirts, trousers, capes and wings, or repaint armor you already own.
+		This quick tour shows where everything is. It takes under a minute, and you can skip it now and reopen it later with the ? button.
+		'''
+	TutSetupTitle: Name, slot and look
+	TutSetup:
+		'''
+		Give the design a name and pick what it is: Head, Body, Legs, Front (scarves, belts) or Back (capes, wings).
+		"Replace vanilla look" hides the sprite of whatever you're wearing in that slot, so your design takes its place. Stats never change.
+		'''
+	TutToolsTitle: Tools
+	TutTools:
+		'''
+		Pencil, eraser, fill, color picker, line, rectangle and move. Under them: brush size, mirror drawing, the pixel grid, and your character shown under the canvas.
+		Every tool has a keyboard shortcut, hover a button to see it.
+		'''
+	TutCanvasTitle: Canvas
+	TutCanvas:
+		'''
+		This is the same 40x56 frame the game uses, so what you draw sits exactly where it will on your character. The faded character underneath is there to help you line things up.
+		Left click paints with the main color, right click with the back color. Scroll to zoom, hold the middle mouse button to move around.
+		'''
+	TutPosesTitle: Poses
+	TutPoses:
+		'''
+		"All poses" is where you'll draw most of the time: it's used for every pose, and the little walking bounce is added for you.
+		If a pose needs its own version (a cape flapping on a walk frame, a sleeve while swinging), pick that pose and draw: a gold dot marks poses with their own drawing. Right-click a pose to undo that.
+		'''
+	TutTimelineTitle: Layers and frames
+	TutTimeline:
+		'''
+		On the left are your layers: add, duplicate, reorder, merge, hide them and change their opacity. Double-click a name to rename it.
+		On the right is the timeline. Add frames to animate the design and set how long each frame lasts. Onion skin shows the neighbouring frames.
+		'''
+	TutPreviewTitle: Live preview
+	TutPreview: Your character wearing the design as you draw. Auto runs through standing, walking, jumping, flying and swinging; or pick a single action. Scroll over it to zoom.
+	TutColorsTitle: Colors
+	TutColors: The big square is the main color, the one behind it is the back color, click them to swap. Use the sliders, type a hex code, or pick from the palette, your character's own colors and recently used ones.
+	TutActionsTitle: Saving, sharing, importing
+	TutActions:
+		'''
+		Undo/redo, all your designs, save, copy the armor you're wearing into a layer to repaint it, import a .png, and export a sprite sheet.
+		You don't have to press save: everything is saved automatically and shows up on every character, world and server.
+		'''
+	TutWearTitle: Wear it
+	TutWear:
+		'''
+		Press this to put the design on. It stays on this character between sessions, and players on the same server see it too, even while you're still drawing.
+		Have fun!
+		'''
+}

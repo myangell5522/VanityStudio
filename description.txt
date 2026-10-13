@@ -1,0 +1,10 @@
+Vanity Studio lets you draw your own clothing and accessories right inside the game.
+
+Open the inventory and click the colour wheel button where the achievement advisor used to be (the little switch under it brings the advisor back).
+
+- Paint head, body, leg, front and back pieces on a vanilla-sized canvas, with layers, opacity and a timeline for animated outfits
+- Every pose the character can be in (standing, walking, jumping, flying, swinging) is previewed live, and any pose can get its own drawing
+- Copy the sprite of armor you're wearing and repaint it: stats stay exactly the same, only the look changes
+- Designs are saved outside your character and world, so every character on every world and server can wear them
+- Other players on the server see what you wear, and see your changes while you draw
+- Export to a vanilla-layout sprite sheet, or share .vsd files with friends

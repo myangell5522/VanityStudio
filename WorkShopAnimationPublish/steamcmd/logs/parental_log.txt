@@ -1,0 +1,15 @@
+
+
+[2026-10-13 21:45:33] Client version: 1788292693
+[2026-10-13 21:45:33] Failed to get ParentalSettings\Settings from config file for account ID 1256002322
+[2026-10-13 21:45:34] Got parental settings for account ID 1256002322
+
+
+[2026-10-13 21:46:19] Client version: 1788292693
+[2026-10-13 21:46:19] Validating parental settings
+[2026-10-13 21:46:19] Settings dump:
+[2026-10-13 21:46:19] 	Account ID: 1256002322
+[2026-10-13 21:46:19] 	Enabled: false
+[2026-10-13 21:46:19] 	Base list: 0 ()
+[2026-10-13 21:46:19] 	No custom list
+[2026-10-13 21:46:19] 	No enabled features

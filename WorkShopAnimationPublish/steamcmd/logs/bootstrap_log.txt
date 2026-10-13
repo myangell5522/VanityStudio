@@ -1,0 +1,85 @@
+
+
+[2026-10-13 21:43:23] Startup - updater built Dec  2 2013 18:43:44
+[2026-10-13 21:43:23] Checking for update on startup
+[2026-10-13 21:43:23] Checking for available update...
+[2026-10-13 21:43:35] Download failed: http error 0
+[2026-10-13 21:43:35] Package file steamcmd_public_all.zip.ea97f8fd711e4ae492274da96e83bf31eb804528 missing or incorrect size
+[2026-10-13 21:43:35] Package file steamcmd_bins_win32.zip.7ae579f513787b332395a86b4515b400c2f57eaa missing or incorrect size
+[2026-10-13 21:43:35] Package file steamcmd_steamservice_win32.zip.27fe69fc971de8c9fe785daa7a934921369d725b missing or incorrect size
+[2026-10-13 21:43:35] Package file steamcmd_steamerrorreporter_win32.zip.e8bd4e7243ba4a8745195d2435b4ed2a9a7d8aa2 missing or incorrect size
+[2026-10-13 21:43:35] Package file steamcmd_siteserverui_win32.zip.4760659039c6d35313324e11ff600d519924b220 missing or incorrect size
+[2026-10-13 21:43:35] Package file steamcmd_win32.zip.ae4a6f47ec93a6d7c6216d3a0638060ffd31dc62 missing or incorrect size
+[2026-10-13 21:43:35] Downloading update (0 of 43,472 KB)...
+[2026-10-13 21:43:47] Error: Download of package (steamcmd_public_all) failed after 0 bytes (0).
+[2026-10-13 21:43:58] Error: Download of package (steamcmd_bins_win32) failed after 0 bytes (0).
+
+
+[2026-10-13 21:44:23] Startup - updater built Dec  2 2013 18:43:44
+[2026-10-13 21:44:23] Checking for update on startup
+[2026-10-13 21:44:23] Checking for available update...
+[2026-10-13 21:44:34] Download failed: http error 0
+
+
+[2026-10-13 21:44:37] Startup - updater built Dec  2 2013 18:43:44
+[2026-10-13 21:44:37] Checking for update on startup
+[2026-10-13 21:44:37] Checking for available update...
+[2026-10-13 21:44:38] Download failed: http error 0
+[2026-10-13 21:44:38] Package file steamcmd_public_all.zip.ea97f8fd711e4ae492274da96e83bf31eb804528 missing or incorrect size
+[2026-10-13 21:44:38] Package file steamcmd_bins_win32.zip.7ae579f513787b332395a86b4515b400c2f57eaa missing or incorrect size
+[2026-10-13 21:44:38] Package file steamcmd_steamservice_win32.zip.27fe69fc971de8c9fe785daa7a934921369d725b missing or incorrect size
+[2026-10-13 21:44:38] Package file steamcmd_steamerrorreporter_win32.zip.e8bd4e7243ba4a8745195d2435b4ed2a9a7d8aa2 missing or incorrect size
+[2026-10-13 21:44:38] Package file steamcmd_siteserverui_win32.zip.4760659039c6d35313324e11ff600d519924b220 missing or incorrect size
+[2026-10-13 21:44:38] Package file steamcmd_win32.zip.ae4a6f47ec93a6d7c6216d3a0638060ffd31dc62 missing or incorrect size
+[2026-10-13 21:44:38] Downloading update (0 of 43,472 KB)...
+[2026-10-13 21:44:39] Error: Download of package (steamcmd_win32) failed after 0 bytes (0).
+[2026-10-13 21:44:39] Error: Download of package (steamcmd_siteserverui_win32) failed after 0 bytes (0).
+[2026-10-13 21:44:39] Error: Download of package (steamcmd_steamerrorreporter_win32) failed after 0 bytes (0).
+[2026-10-13 21:44:39] Error: Download of package (steamcmd_steamservice_win32) failed after 0 bytes (0).
+[2026-10-13 21:44:39] Error: Download of package (steamcmd_bins_win32) failed after 0 bytes (0).
+[2026-10-13 21:44:39] Error: Download of package (steamcmd_public_all) failed after 0 bytes (0).
+[2026-10-13 21:44:39] Package file steamcmd_public_all.zip.ea97f8fd711e4ae492274da96e83bf31eb804528 missing or incorrect size
+[2026-10-13 21:44:39] Package file steamcmd_bins_win32.zip.7ae579f513787b332395a86b4515b400c2f57eaa missing or incorrect size
+[2026-10-13 21:44:39] Package file steamcmd_steamservice_win32.zip.27fe69fc971de8c9fe785daa7a934921369d725b missing or incorrect size
+[2026-10-13 21:44:39] Package file steamcmd_steamerrorreporter_win32.zip.e8bd4e7243ba4a8745195d2435b4ed2a9a7d8aa2 missing or incorrect size
+[2026-10-13 21:44:39] Package file steamcmd_siteserverui_win32.zip.4760659039c6d35313324e11ff600d519924b220 missing or incorrect size
+[2026-10-13 21:44:39] Package file steamcmd_win32.zip.ae4a6f47ec93a6d7c6216d3a0638060ffd31dc62 missing or incorrect size
+[2026-10-13 21:44:39] Downloading update (5,178 of 43,472 KB)...
+[2026-10-13 21:44:39] Downloading update (14,939 of 43,472 KB)...
+[2026-10-13 21:44:39] Downloading update (22,126 of 43,472 KB)...
+[2026-10-13 21:44:40] Downloading update (28,504 of 43,472 KB)...
+[2026-10-13 21:44:40] Downloading update (34,864 of 43,472 KB)...
+[2026-10-13 21:44:40] Downloading update (38,688 of 43,472 KB)...
+[2026-10-13 21:44:40] Downloading update (42,226 of 43,472 KB)...
+[2026-10-13 21:44:41] Downloading update (43,472 of 43,472 KB)...
+[2026-10-13 21:44:41] Download Complete.
+[2026-10-13 21:44:41] uninstalled manifest found in C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\package\steam_cmd_win32 (1).
+[2026-10-13 21:44:41] Found pending update
+[2026-10-13 21:44:41] Applying update...
+[2026-10-13 21:44:41] Extracting package...
+[2026-10-13 21:44:42] Installing update...
+[2026-10-13 21:44:42] Committing NTFS transaction (0 non-transactional backup files)
+[2026-10-13 21:44:42] Cleaning up...
+[2026-10-13 21:44:42] Update complete, launching...
+[2026-10-13 21:44:42] Shutdown
+
+
+[2026-10-13 21:46:16] Startup - updater built Sep  1 2026 12:04:15
+[2026-10-13 21:46:16] Startup - Steam Client launched with: "C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamcmd.exe"  <+164 truncated>
+[2026-10-13 21:46:16] Windows 10.0.26200.0, 0, 2, 256, 1, 48 
+[2026-10-13 21:46:16] Using the following download hosts for Public, Realm steamglobal
+[2026-10-13 21:46:16] 1. https://client-update.fastly.steamstatic.com, /, Realm 'steamglobal', weight was 900, source = 'update_hosts_cached.vdf'
+[2026-10-13 21:46:16] 2. https://client-update.akamai.steamstatic.com, /, Realm 'steamglobal', weight was 400, source = 'update_hosts_cached.vdf'
+[2026-10-13 21:46:16] 3. https://client-update.steamstatic.com, /, Realm 'steamglobal', weight was 1, source = 'baked in'
+[2026-10-13 21:46:16] Checking for update on startup
+[2026-10-13 21:46:16] Проверка на наличие обновлений...
+[2026-10-13 21:46:16] Downloading manifest: https://client-update.fastly.steamstatic.com/steam_cmd_win64
+[2026-10-13 21:46:16] Manifest download: send request
+[2026-10-13 21:46:16] Manifest download: waiting for download to finish
+[2026-10-13 21:46:18] Manifest download: finished
+[2026-10-13 21:46:18] Download skipped: /steam_cmd_win64 version 1788292693, installed version 1788292693, existing pending version 0
+[2026-10-13 21:46:18] Nothing to do
+[2026-10-13 21:46:18] Проверка установки...
+[2026-10-13 21:46:18] Verifying all executable checksums
+[2026-10-13 21:46:18] Verification complete
+[2026-10-13 21:46:22] Shutdown
