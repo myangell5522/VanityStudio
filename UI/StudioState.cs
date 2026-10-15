@@ -22,6 +22,33 @@ namespace VanityStudio.UI
 		Move
 	}
 
+	internal enum Popup
+	{
+		None,
+		Effects,
+		Target,
+		Publish
+	}
+
+	/// <summary>The 20 legacy player frames, grouped the way people think about them.</summary>
+	internal static class PoseGroups
+	{
+		public static readonly (string key, int icon, int[] poses)[] All = {
+			("GroupStand", Icons.FigStand, new[] { 0 }),
+			("GroupUse", Icons.FigSwing, new[] { 1, 2, 3, 4 }),
+			("GroupJump", Icons.FigJump, new[] { 5 }),
+			("GroupWalk", Icons.FigWalk, new[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 })
+		};
+
+		public static int Of(int pose) {
+			for (int g = 0; g < All.Length; g++) {
+				if (Array.IndexOf(All[g].poses, pose) >= 0)
+					return g;
+			}
+			return -1;
+		}
+	}
+
 	internal enum PreviewMode
 	{
 		Auto,
@@ -38,7 +65,27 @@ namespace VanityStudio.UI
 		public const int Pencil = 0, Eraser = 1, Bucket = 2, Picker = 3, Line = 4, Rect = 5, Move = 6, Mirror = 7, Grid = 8, Onion = 9,
 			Eye = 10, EyeOff = 11, Plus = 12, Minus = 13, Up = 14, Down = 15, Left = 16, Right = 17, Play = 18, Pause = 19, Copy = 20,
 			Trash = 21, Undo = 22, Redo = 23, Save = 24, Export = 25, Import = 26, Folder = 27, Shirt = 28, Library = 29, Close = 30,
-			Flip = 31, Merge = 32, Reference = 33, New = 34, Help = 35, Outline = 36, Filter = 37;
+			Flip = 31, Merge = 32, Reference = 33, New = 34, Help = 35, Outline = 36, Filter = 37,
+			Helmet = 38, Pants = 39, Scarf = 40, Cape = 41, Sword = 42, Slime = 43, Boss = 44, Projectile = 45, Star = 46, Drop = 47,
+			Sparkles = 48, Moon = 49, FigStand = 50, FigSwing = 51, FigJump = 52, FigWalk = 53, FigFly = 54, Auto = 55, CopyPrev = 56,
+			Globe = 57, CloudUp = 58, CloudDown = 59, User = 60, Search = 61, Refresh = 62, Check = 63, Wand = 64;
+
+		public static int ForSlot(Core.DesignSlot s) => s switch {
+			Core.DesignSlot.Head => Helmet,
+			Core.DesignSlot.Body => Shirt,
+			Core.DesignSlot.Legs => Pants,
+			Core.DesignSlot.Front => Scarf,
+			_ => Cape
+		};
+
+		public static int ForKind(Core.DesignKind k) => k switch {
+			Core.DesignKind.Item => Sword,
+			Core.DesignKind.NPC => Slime,
+			Core.DesignKind.Projectile => Projectile,
+			_ => Shirt
+		};
+
+		public static int ForDesign(Core.Design d) => d.IsWearable ? ForSlot(d.Slot) : d.Kind == Core.DesignKind.NPC && Core.Targets.IsBoss(Core.Targets.Resolve(d.Kind, d.Target)) ? Boss : ForKind(d.Kind);
 	}
 
 	internal static class L
@@ -73,6 +120,8 @@ namespace VanityStudio.UI
 		internal static int Brush = 1;
 		internal static bool Mirror, Onion, Playing;
 		internal static bool LibraryOpen;
+		internal static bool WorkshopTab;
+		internal static Popup Popup;
 		internal static PreviewMode Preview = PreviewMode.Auto;
 		internal static int PreviewDirection = 1;
 		internal static float ReferenceAlpha = 0.45f;
@@ -148,7 +197,7 @@ namespace VanityStudio.UI
 			Doc = d;
 			Layer = Math.Max(0, d.Layers.Count - 1);
 			Frame = 0;
-			Pose = Design.BasePose;
+			Pose = d.IsWearable ? Design.BasePose : 0;
 			Playing = false;
 			undo.Clear();
 			redo.Clear();
@@ -164,6 +213,32 @@ namespace VanityStudio.UI
 			undo.Clear();
 			redo.Clear();
 			bakedRevision = -1;
+		}
+
+		/// <summary>New retexture for an item / NPC / projectile, starting from its current sprite (resource packs included).</summary>
+		internal static Design NewRetexture(DesignKind kind, int type) {
+			Color[] sheet = SheetIO.SheetFromTarget(kind, type, out int w, out int h);
+			if (sheet == null || w <= 0 || h <= 0) {
+				Notify(L.Get("NoSprite"));
+				return null;
+			}
+			int rows = Targets.SheetRows(kind, type);
+			if (rows < 1 || h % rows != 0)
+				rows = 1;
+			int frameH = h / rows;
+			if (w > Design.MaxSide || frameH > Design.MaxSide) {
+				Notify(L.Get("SpriteTooBig", w, frameH));
+				return null;
+			}
+			string target = Targets.Key(kind, type);
+			string display = Targets.DisplayName(kind, type);
+			var d = Design.CreateRetexture(kind, target, display, w, frameH, rows, DesignLibrary.UniqueName(display));
+			d.Layers.Clear();
+			SheetIO.ImportImage(d, sheet, w, h, display, 0);
+			DesignLibrary.Add(d);
+			Load(d);
+			SoundEngine.PlaySound(SoundID.Item4);
+			return d;
 		}
 
 		internal static Design NewDesign(DesignSlot slot) {
@@ -233,9 +308,19 @@ namespace VanityStudio.UI
 			ToastTime = 240;
 		}
 
+		internal static bool IsApplied(Design d) => d != null && (d.IsWearable ? Local.IsEquipped(d) : Retextures.IsEnabled(d));
+
 		internal static void Equip() {
 			if (Doc == null)
 				return;
+			if (!Doc.IsWearable) {
+				bool on = !Retextures.IsEnabled(Doc);
+				Retextures.SetEnabled(Doc, on);
+				SoundEngine.PlaySound(on ? SoundID.Item4 : SoundID.Grab);
+				if (on)
+					Notify(L.Get("Applied", Doc.Name));
+				return;
+			}
 			VanityPlayer vp = Local;
 			if (vp.IsEquipped(Doc)) {
 				vp.Unequip(Doc.Slot);
@@ -326,7 +411,10 @@ namespace VanityStudio.UI
 				bakedRevision = Doc.Revision;
 				bakedFor = Doc.GetHashCode();
 				bakeDelay = 2;
-				Local.RefreshLive(Doc);
+				if (Doc.IsWearable)
+					Local.RefreshLive(Doc);
+				else
+					Retextures.Refresh(Doc);
 			}
 
 			if (saveTimer > 0 && --saveTimer == 0)
@@ -347,6 +435,10 @@ namespace VanityStudio.UI
 				vp.Outfit[i] = local.Outfit[i];
 			vp.PreviewBake = PreviewBake;
 			vp.PreviewFrame = Playing ? -1 : Frame;
+			vp.PreviewNight = StudioSettings.PreviewNight;
+			// a retexture isn't worn, keep the clone's own outfit
+			if (!Doc.IsWearable)
+				vp.PreviewBake = null;
 
 			using (new Main.CurrentPlayerOverride(Dummy)) {
 				Dummy.ResetEffects();

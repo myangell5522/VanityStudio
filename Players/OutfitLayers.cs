@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 using VanityStudio.Core;
 
@@ -33,8 +34,7 @@ namespace VanityStudio.Players
 			Player p = drawInfo.drawPlayer;
 			var vp = p.GetModPlayer<VanityPlayer>();
 			BakedDesign bake = vp.Drawn(Slot);
-			Texture2D tex = bake?.GetTexture();
-			if (tex == null)
+			if (bake == null)
 				return;
 
 			Rectangle frameRect = Slot == DesignSlot.Legs ? p.legFrame : p.bodyFrame;
@@ -82,9 +82,20 @@ namespace VanityStudio.Players
 			Point off = Slots.FrameOffset(Slot);
 			origin += new Vector2(off.X, off.Y);
 
-			drawInfo.DrawDataCache.Add(new DrawData(tex, basePos + anchor + bob, src, color, rotation, origin, 1f, drawInfo.playerEffect) {
-				shader = shader
-			});
+			// lighting already includes the immune flicker / potion alpha; glow keeps that alpha but not the darkness
+			float alpha = color.A / 255f;
+			foreach (BakedPass pass in bake.Passes) {
+				Texture2D tex = pass.GetTexture(bake.AtlasWidth, bake.AtlasHeight);
+				if (tex == null)
+					continue;
+				Color c = pass.Glow || pass.Pulse ? Color.White * alpha : color;
+				if (pass.Pulse)
+					c *= Retextures.PulseAlpha;
+				int passShader = pass.DyeItem > 0 ? GameShaders.Armor.GetShaderIdFromItemId(pass.DyeItem) : shader;
+				drawInfo.DrawDataCache.Add(new DrawData(tex, basePos + anchor + bob, src, c, rotation, origin, 1f, drawInfo.playerEffect) {
+					shader = passShader
+				});
+			}
 		}
 	}
 

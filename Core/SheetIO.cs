@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.IO.Compression;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader.IO;
 
 namespace VanityStudio.Core
@@ -20,6 +23,16 @@ namespace VanityStudio.Core
 
 		public static void WritePng(string path, Color[] px, int w, int h) {
 			using var fs = File.Create(path);
+			WritePng(fs, px, w, h);
+		}
+
+		public static byte[] PngBytes(Color[] px, int w, int h) {
+			using var ms = new MemoryStream();
+			WritePng(ms, px, w, h);
+			return ms.ToArray();
+		}
+
+		public static void WritePng(Stream fs, Color[] px, int w, int h) {
 			fs.Write(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
 
 			var ihdr = new byte[13];
@@ -105,21 +118,181 @@ namespace VanityStudio.Core
 
 		#region export
 
+		/// <summary>
+		/// Writes the design in the layouts the game itself uses, so the files can go straight into a mod or a resource pack:
+		/// frames stacked vertically, one file per animation frame, plus a tModLoader body sheet and a glowmask when they apply.
+		/// Returns the folder.
+		/// </summary>
 		public static string Export(Design d) {
-			Directory.CreateDirectory(DesignLibrary.ExportsDir);
-			string baseName = DesignLibrary.SafeFileName(d.Name) + "_" + d.Slot;
-			int sw = d.Width * d.FrameCount, sh = d.Height * Design.PoseCount;
-			var sheet = new Color[sw * sh];
+			string name = DesignLibrary.SafeFileName(d.Name);
+			string folder = Path.Combine(DesignLibrary.ExportsDir, name + "_" + (d.IsWearable ? d.Slot.ToString() : d.Kind.ToString()));
+			Directory.CreateDirectory(folder);
+			string Suffix(int f) => d.FrameCount > 1 ? "_frame" + (f + 1) : "";
+
 			for (int f = 0; f < d.FrameCount; f++) {
-				for (int pose = 0; pose < Design.PoseCount; pose++) {
-					Color[] cell = d.WornFrame(f, pose);
-					Pixels.Blit(sheet, sw, sh, cell, d.Width, d.Height, 0, 0, d.Width, d.Height, f * d.Width, pose * d.Height);
+				if (d.IsWearable) {
+					string stem = name + "_" + d.Slot;
+					Color[] sheet = WornSheet(d, f, out int sw, out int sh);
+					WritePng(Path.Combine(folder, stem + Suffix(f) + ".png"), sheet, sw, sh);
+					if (d.Width != 40) {
+						// vanilla back/front accessories are 40 wide; this is the middle of the bigger canvas
+						Color[] narrow = Crop(sheet, sw, sh, (d.Width - 40) / 2, d.Height, 40, 56);
+						WritePng(Path.Combine(folder, stem + "_40x56" + Suffix(f) + ".png"), narrow, 40, 56 * Design.PoseCount);
+					}
+					if (d.Slot == DesignSlot.Body && !Main.dedServ) {
+						Color[] comp = CompositeBody(d, f, out int cw, out int ch);
+						if (comp != null)
+							WritePng(Path.Combine(folder, stem + "_Composite" + Suffix(f) + ".png"), comp, cw, ch);
+					}
+					Color[] glow = GlowSheet(d, f, Design.PoseCount, out bool any);
+					if (any)
+						WritePng(Path.Combine(folder, stem + "_Glow" + Suffix(f) + ".png"), glow, d.Width, d.Height * Design.PoseCount);
+				}
+				else {
+					int sh = d.Height * d.Rows;
+					var sheet = new Color[d.Width * sh];
+					for (int r = 0; r < d.Rows; r++)
+						Pixels.Blit(sheet, d.Width, sh, d.Flatten(f, r), d.Width, d.Height, 0, 0, d.Width, d.Height, 0, r * d.Height);
+					WritePng(Path.Combine(folder, name + Suffix(f) + ".png"), sheet, d.Width, sh);
+					Color[] glow = GlowSheet(d, f, d.Rows, out bool any);
+					if (any)
+						WritePng(Path.Combine(folder, name + "_Glow" + Suffix(f) + ".png"), glow, d.Width, sh);
 				}
 			}
-			string png = Path.Combine(DesignLibrary.ExportsDir, baseName + ".png");
-			WritePng(png, sheet, sw, sh);
-			DesignLibrary.WriteFile(Path.Combine(DesignLibrary.ExportsDir, baseName + ".vsd"), d);
-			return png;
+			DesignLibrary.WriteFile(Path.Combine(folder, name + ".vsd"), d);
+			return folder;
+		}
+
+		private static Color[] WornSheet(Design d, int frame, out int w, out int h) {
+			w = d.Width;
+			h = d.Height * Design.PoseCount;
+			var sheet = new Color[w * h];
+			for (int pose = 0; pose < Design.PoseCount; pose++)
+				Pixels.Blit(sheet, w, h, d.WornFrame(frame, pose), d.Width, d.Height, 0, 0, d.Width, d.Height, 0, pose * d.Height);
+			return sheet;
+		}
+
+		private static Color[] Crop(Color[] sheet, int sw, int sh, int x, int cellH, int cw, int ch) {
+			var dst = new Color[cw * ch * Design.PoseCount];
+			for (int pose = 0; pose < Design.PoseCount; pose++) {
+				int y = pose * cellH + (cellH - ch) / 2;
+				Pixels.Blit(dst, cw, ch * Design.PoseCount, sheet, sw, sh, x, y, cw, ch, 0, pose * ch);
+			}
+			return dst;
+		}
+
+		// Only the glowing layers, in the same layout: exactly what a glowmask texture is.
+		private static Color[] GlowSheet(Design d, int frame, int rows, out bool any) {
+			any = d.Layers.Any(l => l.Visible && (l.Glow || l.Pulse));
+			int h = d.Height * rows;
+			var sheet = new Color[d.Width * h];
+			if (!any)
+				return sheet;
+			for (int r = 0; r < rows; r++) {
+				var cell = d.NewBuffer();
+				foreach (DesignLayer l in d.Layers) {
+					if (l.Visible && (l.Glow || l.Pulse))
+						Pixels.Composite(cell, d.LayerPixels(l, frame, r), l.Opacity);
+				}
+				Pixels.Blit(sheet, d.Width, h, cell, d.Width, d.Height, 0, 0, d.Width, d.Height, 0, r * d.Height);
+			}
+			return sheet;
+		}
+
+		/// <summary>
+		/// tModLoader body textures use the 1.4 "composite" sheet: torso, shoulders and each arm position as separate
+		/// 40x56 cells, so the arms can swing on their own. Our drawings are whole poses, so they are cut apart along the
+		/// shape of the vanilla body: pixels over an arm go to that arm's cell, everything else to the torso.
+		/// It's a starting point, sleeves that overlap the chest may need a touch-up.
+		/// </summary>
+		public static Color[] CompositeBody(Design d, int frame, out int w, out int h) {
+			w = 360;
+			h = 224;
+			var skin = new List<(Color[] px, int w, int h)>();
+			foreach (int id in new[] { PlayerTextureID.TorsoSkin, PlayerTextureID.Undershirt, PlayerTextureID.Shirt, PlayerTextureID.ArmSkin, PlayerTextureID.ArmUndershirt, PlayerTextureID.ArmHand, PlayerTextureID.ArmShirt, PlayerTextureID.Hands }) {
+				Color[] px = Grab(TextureAssets.Players[0, id], out int tw, out int th);
+				if (px != null)
+					skin.Add((px, tw, th));
+			}
+			if (skin.Count == 0)
+				return null;
+			w = skin[0].w;
+			h = skin[0].h;
+			int W = w, H = h;
+
+			bool[] Mask(Point cell) {
+				var m = new bool[40 * 56];
+				foreach (var (px, tw, th) in skin) {
+					for (int y = 0; y < 56; y++) {
+						for (int x = 0; x < 40; x++) {
+							int sx = cell.X * 40 + x, sy = cell.Y * 56 + y;
+							if (sx < tw && sy < th && px[sy * tw + sx].A > 0)
+								m[y * 40 + x] = true;
+						}
+					}
+				}
+				// one pixel of slack so sleeves a bit wider than the arm still count as arm
+				var grown = (bool[])m.Clone();
+				for (int y = 0; y < 56; y++) {
+					for (int x = 0; x < 40; x++) {
+						if (!m[y * 40 + x])
+							continue;
+						if (x > 0) grown[y * 40 + x - 1] = true;
+						if (x < 39) grown[y * 40 + x + 1] = true;
+						if (y > 0) grown[(y - 1) * 40 + x] = true;
+						if (y < 55) grown[(y + 1) * 40 + x] = true;
+					}
+				}
+				return grown;
+			}
+
+			// the drawing for a pose without the walk bob, centred on the 40x56 body frame
+			Color[] Pose(int pose) {
+				Color[] worn = d.WornFrame(frame, pose);
+				var px = new Color[40 * 56];
+				Point off = Slots.FrameOffset(d.Slot);
+				Pixels.Blit(px, 40, 56, worn, d.Width, d.Height, off.X, off.Y, 40, 56, 0, 0);
+				return Pixels.Shifted(px, 40, 56, 0, -Slots.BobFor(pose));
+			}
+
+			var sheet = new Color[W * H];
+			void Put(Point cell, Color[] px) => Pixels.Blit(sheet, W, H, px, 40, 56, 0, 0, 40, 56, cell.X * 40, cell.Y * 56);
+
+			// torso: everything that isn't an arm, idle and jump versions, same for both body types
+			foreach (var (torso, pose) in new[] { (new Point(0, 0), 0), (new Point(1, 0), 5) }) {
+				Color[] px = Pose(pose);
+				Point front = FrontArmFrame(pose, out _);
+				bool[] fm = Mask(front), bm = Mask(new Point(front.X, front.Y + 2));
+				var t = new Color[px.Length];
+				for (int i = 0; i < px.Length; i++) {
+					if (!fm[i] && !bm[i])
+						t[i] = px[i];
+				}
+				Put(torso, t);
+				Put(new Point(torso.X, torso.Y + 2), t);
+			}
+
+			// arms: each arm cell is cut from the first pose that uses it
+			var done = new HashSet<Point>();
+			for (int pose = 0; pose < Design.PoseCount; pose++) {
+				Point front = FrontArmFrame(pose, out _);
+				if (!done.Add(front))
+					continue;
+				Point back = new(front.X, front.Y + 2);
+				Color[] px = Pose(pose);
+				bool[] fm = Mask(front), bm = Mask(back);
+				var f = new Color[px.Length];
+				var b = new Color[px.Length];
+				for (int i = 0; i < px.Length; i++) {
+					if (fm[i])
+						f[i] = px[i];
+					else if (bm[i])
+						b[i] = px[i];
+				}
+				Put(front, f);
+				Put(back, b);
+			}
+			return sheet;
 		}
 
 		#endregion
@@ -127,20 +300,21 @@ namespace VanityStudio.Core
 		#region import
 
 		/// <summary>
-		/// Puts an image into a new layer. Understands vanilla 20-frame sheets (and wider ones, one column per
-		/// animation frame); anything else is pasted into the current frame's base drawing.
+		/// Puts an image into a new layer. Understands vanilla sheets (frames stacked vertically, and wider ones with one
+		/// column per animation frame); anything else is pasted into the current frame.
 		/// </summary>
-		public static int ImportImage(Design d, Color[] px, int w, int h, string layerName, int atFrame) {
+		public static int ImportImage(Design d, Color[] px, int w, int h, string layerName, int atFrame, int atPose = Design.BasePose) {
 			if (d.Layers.Count >= Design.MaxLayers)
 				return -1;
 			var layer = new DesignLayer { Name = layerName };
 			d.Layers.Add(layer);
 			int layerIndex = d.Layers.Count - 1;
+			int rows = d.Rows;
 
 			int cellH = 0, cellW = 0;
-			if (h % Design.PoseCount == 0) {
-				int ch = h / Design.PoseCount;
-				if (ch == 56 && w % 40 == 0) {
+			if (h % rows == 0) {
+				int ch = h / rows;
+				if (d.IsWearable && ch == 56 && w % 40 == 0) {
 					cellH = 56;
 					cellW = 40;
 				}
@@ -154,7 +328,8 @@ namespace VanityStudio.Core
 				var cel = d.NewBuffer();
 				int ox = Math.Max(0, (d.Width - w) / 2), oy = Math.Max(0, (d.Height - h) / 2);
 				Pixels.Blit(cel, d.Width, d.Height, px, w, h, 0, 0, Math.Min(w, d.Width), Math.Min(h, d.Height), ox, oy);
-				layer.Cels[new CelKey(atFrame, Design.BasePose)] = cel;
+				int pose = d.IsWearable ? atPose : Math.Max(0, atPose);
+				layer.Cels[new CelKey(atFrame, pose)] = cel;
 				return layerIndex;
 			}
 
@@ -163,7 +338,6 @@ namespace VanityStudio.Core
 				d.InsertFrame(d.FrameCount, -1);
 
 			int dx = (d.Width - cellW) / 2, dy = (d.Height - cellH) / 2;
-			int bobSlot = Slots.Bobs(d.Slot) ? 1 : 0;
 			for (int col = 0; col < columns && atFrame + col < d.FrameCount; col++) {
 				int frame = atFrame + col;
 				Color[] Cell(int row) {
@@ -171,17 +345,30 @@ namespace VanityStudio.Core
 					Pixels.Blit(c, d.Width, d.Height, px, w, h, col * cellW, row * cellH, cellW, cellH, dx, dy);
 					return c;
 				}
+				if (!d.IsWearable) {
+					// sprite sheets: every frame of the sheet is its own drawing
+					for (int r = 0; r < rows; r++)
+						layer.Cels[new CelKey(frame, r)] = Cell(r);
+					continue;
+				}
 				Color[] baseCel = Cell(0);
 				layer.Cels[new CelKey(frame, Design.BasePose)] = baseCel;
 				for (int pose = 1; pose < Design.PoseCount; pose++) {
 					Color[] cel = Cell(pose);
 					// vanilla sheets have the walk bob baked in, so only keep rows that really differ
-					Color[] expected = bobSlot == 1 ? Pixels.Shifted(baseCel, d.Width, d.Height, 0, Slots.BobFor(pose)) : baseCel;
+					Color[] expected = d.Bobs ? Pixels.Shifted(baseCel, d.Width, d.Height, 0, Slots.BobFor(pose)) : baseCel;
 					if (!Pixels.Same(cel, expected))
 						layer.Cels[new CelKey(frame, pose)] = cel;
 				}
 			}
 			return layerIndex;
+		}
+
+		/// <summary>The current sprite of an item / NPC / projectile, straight from the game (resource packs included).</summary>
+		public static Color[] SheetFromTarget(DesignKind kind, int type, out int w, out int h) {
+			w = h = 0;
+			Asset<Texture2D> asset = Targets.OriginalAsset(kind, type);
+			return asset == null ? null : Grab(asset, out w, out h);
 		}
 
 		/// <summary>Builds a vanilla 40x1120 sheet out of whatever the player is showing in that slot.</summary>
@@ -253,7 +440,7 @@ namespace VanityStudio.Core
 			return null;
 		}
 
-		private static Color[] Grab(Asset<Texture2D> asset, out int w, out int h) {
+		internal static Color[] Grab(Asset<Texture2D> asset, out int w, out int h) {
 			w = h = 0;
 			if (asset == null)
 				return null;

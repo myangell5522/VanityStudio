@@ -25,6 +25,7 @@ namespace VanityStudio.Players
 		public BakedDesign PreviewBake;
 		public int PreviewFrame = -1;
 		public bool SuppressDesigns;
+		public bool PreviewNight;
 
 		private readonly bool[] netDirty = new bool[Slots.Count];
 		private int netCooldown;
@@ -135,6 +136,8 @@ namespace VanityStudio.Players
 		}
 
 		public override void PostUpdate() {
+			if (!Main.dedServ)
+				EmitDust();
 			if (Player.whoAmI != Main.myPlayer || Main.netMode != NetmodeID.MultiplayerClient)
 				return;
 			if (netCooldown > 0) {
@@ -142,6 +145,40 @@ namespace VanityStudio.Players
 				return;
 			}
 			SendDirty();
+		}
+
+		// Particles come off the actual pixels of the layer that has them, so a glowing gem sparkles and the cloth doesn't.
+		private void EmitDust() {
+			if (Player.dead || Player.invis || !Player.active || Main.gamePaused)
+				return;
+			for (int s = 0; s < Slots.Count; s++) {
+				BakedDesign b = Outfit[s];
+				if (b == null)
+					continue;
+				foreach (BakedPass pass in b.Passes) {
+					if (!pass.EmitsDust || !Main.rand.NextBool(Math.Max(1, (int)(1f / pass.DustRate))))
+						continue;
+					var slot = (DesignSlot)s;
+					Rectangle frameRect = slot == DesignSlot.Legs ? Player.legFrame : Player.bodyFrame;
+					int pose = frameRect.Height > 0 ? Math.Clamp(frameRect.Y / frameRect.Height, 0, Design.PoseCount - 1) : 0;
+					int frame = FrameFor(b);
+					Rectangle src = b.Source(frame, pose, out bool overridden);
+					int[] pts = pass.EmitPoints(src.X * 1000 + src.Y, src, b.AtlasWidth);
+					if (pts.Length == 0)
+						continue;
+					int pick = pts[Main.rand.Next(pts.Length)];
+					int x = pick % b.Width, y = pick / b.Width;
+					Point off = Slots.FrameOffset(slot);
+					int bob = !overridden && Slots.Bobs(slot) ? Slots.BobFor(pose) : 0;
+					if (Player.direction < 0)
+						x = b.Width - 1 - x;
+					var topLeft = new Vector2(Player.position.X + Player.width / 2f - 20 - off.X, Player.position.Y + Player.height - 56 + 4 - off.Y + bob);
+					Dust d = Dust.NewDustPerfect(topLeft + new Vector2(x + 0.5f, y + 0.5f), pass.Dust, Player.velocity * 0.2f + Main.rand.NextVector2Circular(0.4f, 0.4f));
+					d.noGravity = true;
+					d.scale = Main.rand.NextFloat(0.7f, 1.1f);
+					d.noLight = !pass.Glow;
+				}
+			}
 		}
 
 		private void SendDirty() {
@@ -201,22 +238,28 @@ namespace VanityStudio.Players
 				return;
 			// The preview clone floats somewhere on screen; world lighting there means nothing, so light it like the character menu.
 			float a = 1f - drawInfo.shadow;
+			float k = PreviewNight ? 0.3f : 1f;
+			// darken without making it see-through, so glowing layers stand out like they would at night
+			Color Shade(Color c) {
+				c *= a;
+				return new Color((int)(c.R * k), (int)(c.G * k), (int)(c.B * k), c.A);
+			}
 			Player p = drawInfo.drawPlayer;
-			drawInfo.colorEyeWhites = Color.White * a;
-			drawInfo.colorEyes = p.eyeColor * a;
-			drawInfo.colorHair = p.GetHairColor(useLighting: false) * a;
-			drawInfo.colorHead = p.skinColor * a;
-			drawInfo.colorBodySkin = p.skinColor * a;
-			drawInfo.colorLegs = p.skinColor * a;
-			drawInfo.colorShirt = p.shirtColor * a;
-			drawInfo.colorUnderShirt = p.underShirtColor * a;
-			drawInfo.colorPants = p.pantsColor * a;
-			drawInfo.colorShoes = p.shoeColor * a;
-			drawInfo.colorArmorHead = Color.White * a;
-			drawInfo.colorArmorBody = Color.White * a;
-			drawInfo.colorArmorLegs = Color.White * a;
-			drawInfo.colorMount = Color.White * a;
-			drawInfo.colorDisplayDollSkin = p.skinColor * a;
+			drawInfo.colorEyeWhites = Shade(Color.White);
+			drawInfo.colorEyes = Shade(p.eyeColor);
+			drawInfo.colorHair = Shade(p.GetHairColor(useLighting: false));
+			drawInfo.colorHead = Shade(p.skinColor);
+			drawInfo.colorBodySkin = Shade(p.skinColor);
+			drawInfo.colorLegs = Shade(p.skinColor);
+			drawInfo.colorShirt = Shade(p.shirtColor);
+			drawInfo.colorUnderShirt = Shade(p.underShirtColor);
+			drawInfo.colorPants = Shade(p.pantsColor);
+			drawInfo.colorShoes = Shade(p.shoeColor);
+			drawInfo.colorArmorHead = Shade(Color.White);
+			drawInfo.colorArmorBody = Shade(Color.White);
+			drawInfo.colorArmorLegs = Shade(Color.White);
+			drawInfo.colorMount = Shade(Color.White);
+			drawInfo.colorDisplayDollSkin = Shade(p.skinColor);
 		}
 	}
 }

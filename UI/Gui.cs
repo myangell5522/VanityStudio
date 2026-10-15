@@ -77,7 +77,19 @@ namespace VanityStudio.UI
 				Active = null;
 		}
 
+		private static readonly System.Collections.Generic.List<Action> overlays = new();
+
+		/// <summary>Queue something to draw on top of the whole window this frame (hover previews and the like).</summary>
+		public static void Overlay(Action draw) => overlays.Add(draw);
+
+		public static void FlushOverlays() {
+			foreach (Action a in overlays)
+				a();
+			overlays.Clear();
+		}
+
 		public static void EndFrame() {
+			FlushOverlays();
 			if (hovered != null && hovered != lastHovered)
 				SoundEngine.PlaySound(SoundID.MenuTick);
 			lastHovered = hovered;
@@ -269,6 +281,26 @@ namespace VanityStudio.UI
 			}
 			return false;
 		}
+
+		/// <summary>Panel button with an icon on the left and a label, the way vanilla menus pair art with text.</summary>
+		public static bool IconTextButton(Rectangle r, int icon, string label, string id, bool selected = false, string tip = null, bool enabled = true, float textScale = 0.8f) {
+			bool hover = enabled && Free && Hover(r);
+			Color bg = selected ? ButtonOn : hover ? ButtonHover : ButtonIdle;
+			Panel(r, bg, hover ? Gold : selected ? Gold * 0.6f : Color.Black);
+			Icon(icon, new Vector2(r.X + 16, r.Center.Y), enabled ? Color.White : Color.White * 0.4f, 0.9f);
+			Text(Fit(label, r.Width - 36, textScale), new Vector2(r.X + 30, r.Center.Y + 2), enabled ? Color.White : Color.Gray, textScale, 0f, 0.5f);
+			if (!hover)
+				return false;
+			MarkHover(id, tip);
+			if (LeftPressed) {
+				SoundEngine.PlaySound(SoundID.MenuTick);
+				LeftPressed = false;
+				return true;
+			}
+			return false;
+		}
+
+		public static int IconTextWidth(string label, float scale = 0.8f) => (int)Measure(label, scale).X + 44;
 
 		public static bool Toggle(Rectangle r, string label, string id, ref bool value, string tip = null) {
 			if (Button(r, label, id, value, true, tip)) {

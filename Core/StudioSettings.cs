@@ -15,6 +15,7 @@ namespace VanityStudio.Core
 		public static bool ShowGrid = true;
 		public static bool TutorialDone;
 		public static int PreviewScale = 3;
+		public static bool PreviewNight;
 
 		private static string FilePath => Path.Combine(DesignLibrary.Root, "settings.txt");
 
@@ -44,6 +45,16 @@ namespace VanityStudio.Core
 							if (int.TryParse(value, out int ps))
 								PreviewScale = Math.Clamp(ps, 2, 4);
 							break;
+						case "retextures":
+							Retextures.Enabled.Clear();
+							foreach (string id in value.Split(',', StringSplitOptions.RemoveEmptyEntries)) {
+								if (Guid.TryParse(id, out Guid g))
+									Retextures.Enabled.Add(g);
+							}
+							break;
+						case "previewNight":
+							PreviewNight = value == "1";
+							break;
 						case "recent":
 							RecentColors = value.Split(',', StringSplitOptions.RemoveEmptyEntries)
 								.Select(s => Pixels.TryParseHex(s, out Color c) ? c : (Color?)null)
@@ -65,6 +76,8 @@ namespace VanityStudio.Core
 					"grid=" + (ShowGrid ? "1" : "0"),
 					"tutorialDone=" + (TutorialDone ? "1" : "0"),
 					"previewScale=" + PreviewScale,
+					"retextures=" + string.Join(",", Retextures.Enabled.Select(g => g.ToString("N"))),
+					"previewNight=" + (PreviewNight ? "1" : "0"),
 					"recent=" + string.Join(",", RecentColors.Select(Pixels.ToHex))
 				});
 			}

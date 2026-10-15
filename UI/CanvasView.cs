@@ -48,7 +48,7 @@ namespace VanityStudio.UI
 			Gui.BeginClip(inner, immediate: true);
 			Gui.Checker(img, Math.Max(2, zoom * 2));
 
-			if (StudioSettings.ShowReference && StudioState.Dummy != null)
+			if (StudioSettings.ShowReference && (StudioState.Dummy != null || !d.IsWearable))
 				DrawReference(img, d);
 
 			if (StudioState.Onion && d.FrameCount > 1) {
@@ -350,6 +350,19 @@ namespace VanityStudio.UI
 		}
 
 		private static void DrawReference(Rectangle img, Design d) {
+			if (!d.IsWearable) {
+				// retextures: the sprite as the game has it right now, under the drawing
+				int type = Targets.Resolve(d.Kind, d.Target);
+				var asset = type > 0 ? Targets.OriginalAsset(d.Kind, type) : null;
+				if (asset == null || !asset.IsLoaded)
+					return;
+				Texture2D tex = asset.Value;
+				int row = Math.Clamp(StudioState.Pose, 0, d.Rows - 1);
+				var src = new Rectangle(0, row * d.Height, Math.Min(d.Width, tex.Width), Math.Min(d.Height, tex.Height - row * d.Height));
+				if (src.Height > 0)
+					Gui.Sb.Draw(tex, new Rectangle(img.X, img.Y, src.Width * zoom, src.Height * zoom), src, Color.White * StudioState.ReferenceAlpha);
+				return;
+			}
 			Player dummy = StudioState.Dummy;
 			var vp = dummy.GetModPlayer<Players.VanityPlayer>();
 			Point off = Slots.FrameOffset(d.Slot);
@@ -404,7 +417,8 @@ namespace VanityStudio.UI
 
 		private static void DrawStatus(Rectangle inner, Design d) {
 			string where = Inside(d, HoverPixel) ? $"{HoverPixel.X}, {HoverPixel.Y}" : "";
-			string pose = StudioState.Pose < 0 ? L.Get("PoseBase") : L.Pose(StudioState.Pose) + (d.HasOverride(StudioState.Frame, StudioState.Pose) ? "" : " · " + L.Get("UsingBase"));
+			string pose = !d.IsWearable ? L.Get("SheetFrameN", Math.Max(0, StudioState.Pose) + 1) + " / " + d.Rows
+				: StudioState.Pose < 0 ? L.Get("PoseBase") : L.Pose(StudioState.Pose) + (d.HasOverride(StudioState.Frame, StudioState.Pose) ? "" : " · " + L.Get("UsingBase"));
 			Gui.Text($"{d.Width}x{d.Height}  x{zoom}   {where}", new Vector2(inner.X + 6, inner.Bottom - 4), Gui.Muted, 0.7f, 0f, 1f);
 			Gui.Text(pose, new Vector2(inner.Right - 6, inner.Bottom - 4), StudioState.Pose < 0 ? Gui.Muted : Gui.Gold, 0.7f, 1f, 1f);
 		}

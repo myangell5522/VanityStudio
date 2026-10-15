@@ -1,0 +1,110 @@
+
+
+[2026-10-13 21:45:33] Client version: 1788292693
+[2026-10-13 21:45:33] [AppID 7] Starting sync (init,)
+[2026-10-13 21:45:33] [AppID 7] AutoCloud checking local state for user 1256002322
+[2026-10-13 21:45:33] [AppID 7] Not running AutoCloud. No config data found
+[2026-10-13 21:45:33] [U:1:1256002322] [AppID 7] Init cache request complete
+[2026-10-13 21:45:33] [AppID 7] YldWriteCacheDirectoryToFile - empty vector, deleting 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-13 21:45:38] [AppID 7] Starting sync (down,)
+[2026-10-13 21:45:39] [AppID 7] Attempting to sync from local change number '0' to global change number '572' (full)
+[2026-10-13 21:45:39] [AppID 7] Need to download file serverbrowser_hist.vdf
+[2026-10-13 21:45:39] [AppID 7] Need to download file sharedconfig.vdf
+[2026-10-13 21:45:39] [AppID 7] HTTP download for file 'serverbrowser_hist.vdf' from host 'steamcloudsweden.blob.core.windows.net', path /cloud/12/13/DD/4A/7/062_B_1F9A4403_8B7F0_1086.dat, beginning. . .
+[2026-10-13 21:45:39] [AppID 7] HTTP download for file 'sharedconfig.vdf' from host 'steamcloudsweden.blob.core.windows.net', path /cloud/12/13/DD/4A/7/062_B_1F9A4402_F7BFE_88.dat, beginning. . .
+[2026-10-13 21:45:41] [AppID 7] HTTP download for file 'serverbrowser_hist.vdf' from host 'steamcloudsweden.blob.core.windows.net' - Success.
+[2026-10-13 21:45:41] [AppID 7] Download OK for file serverbrowser_hist.vdf
+[2026-10-13 21:45:41] [AppID 7] HTTP download for file 'sharedconfig.vdf' from host 'steamcloudsweden.blob.core.windows.net' - Success.
+[2026-10-13 21:45:41] [AppID 7] Download OK for file sharedconfig.vdf
+[2026-10-13 21:45:41] [AppID 7] Download complete, result OK
+[2026-10-13 21:45:41] [AppID 7] Successfully synced to ChangeNumber 572
+[2026-10-13 21:45:41] [Roaming Config] OnRemoteStorageSyncedClient() - result OK
+[2026-10-13 21:45:41] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-13 21:45:42] [AppID 1281930] Starting sync (init,)
+[2026-10-13 21:45:42] [AppID 1281930] AutoCloud checking local state for user 1256002322
+[2026-10-13 21:45:42] [U:1:1256002322] [AppID 1281930] Init cache request complete
+[2026-10-13 21:45:42] [AppID 1281930] YldWriteCacheDirectoryToFile - empty vector, deleting 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/1281930/remotecache.vdf'
+[2026-10-13 21:45:42] [AppID 1281930] HTTP upload for UGC file 'previewfile_3819271557.gif' beginning . . .
+[2026-10-13 21:45:44] [AppID 1281930] HTTP upload for UGC file 'previewfile_3819271557.gif' (length=766746) to (135.130.16.65 / 135.130.16.65, host: steamugcquincy.blob.core.windows.net), path /cloud/12/13/DD/4A/105600/316_7_1CF8B11B_D332C_1.dat - success.
+[2026-10-13 21:45:44] [AppID 1281930] UGC Upload OK for file previewfile_3819271557.gif
+
+
+[2026-10-13 21:46:18] Client version: 1788292693
+[2026-10-13 21:46:18] [AppID 7] Starting sync (init,)
+[2026-10-13 21:46:18] [AppID 7] AutoCloud checking local state for user 1256002322
+[2026-10-13 21:46:18] [U:1:1256002322] [AppID 7] Init cache request complete
+[2026-10-13 21:46:18] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-13 21:46:19] [Roaming Config] PerformSyncCloud - evaluating sync state
+[2026-10-13 21:46:19] [AppID 7] Starting sync (eval,)
+[2026-10-13 21:46:19] [AppID 7] AutoCloud checking local state for user 1256002322
+[2026-10-13 21:46:19] [AppID 7] Currently already synced to global change number '572', should be nothing to download
+[2026-10-13 21:46:19] [AppID 7] File is in sync serverbrowser_hist.vdf
+[2026-10-13 21:46:19] [AppID 7] File is in sync sharedconfig.vdf
+[2026-10-13 21:46:19] [AppID 7] Eval complete
+[2026-10-13 21:46:19] [Roaming Config] OnRemoteStorageStateEvaluated - result OK
+[2026-10-13 21:46:19] [AppID 7] Starting sync (down,)
+[2026-10-13 21:46:19] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-13 21:46:20] [AppID 7] Currently already synced to global change number '572', should be nothing to download
+[2026-10-13 21:46:20] [AppID 7] Download complete in build list
+[2026-10-13 21:46:20] [AppID 7] Successfully synced to ChangeNumber 0
+[2026-10-13 21:46:20] [Roaming Config] OnRemoteStorageSyncedClient() - result OK
+[2026-10-13 21:46:20] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-13 21:46:21] [AppID 1281930] Starting sync (init,)
+[2026-10-13 21:46:21] [AppID 1281930] AutoCloud checking local state for user 1256002322
+[2026-10-13 21:46:21] [U:1:1256002322] [AppID 1281930] Init cache request complete
+[2026-10-13 21:46:21] [AppID 1281930] YldWriteCacheDirectoryToFile - empty vector, deleting 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/1281930/remotecache.vdf'
+[2026-10-13 21:46:21] [AppID 1281930] UGC Upload OK for file previewfile_3819271557.gif
+
+
+[2026-10-14 19:53:50] Client version: 1791918946
+[2026-10-14 19:53:50] [AppID 7] Starting sync (init,)
+[2026-10-14 19:53:50] [AppID 7] AutoCloud checking local state for user 1256002322
+[2026-10-14 19:53:50] [U:1:1256002322] [AppID 7] Init cache request complete
+[2026-10-14 19:53:50] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-14 19:53:53] [Roaming Config] PerformSyncCloud - evaluating sync state
+[2026-10-14 19:53:53] [AppID 7] Starting sync (eval,)
+[2026-10-14 19:53:53] [AppID 7] AutoCloud checking local state for user 1256002322
+[2026-10-14 19:53:54] [AppID 7] Currently already synced to global change number '572', should be nothing to download
+[2026-10-14 19:53:54] [AppID 7] File is in sync serverbrowser_hist.vdf
+[2026-10-14 19:53:54] [AppID 7] File is in sync sharedconfig.vdf
+[2026-10-14 19:53:54] [AppID 7] Eval complete
+[2026-10-14 19:53:54] [Roaming Config] OnRemoteStorageStateEvaluated - result OK
+[2026-10-14 19:53:54] [AppID 7] Starting sync (down,)
+[2026-10-14 19:53:54] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-14 19:53:54] [AppID 7] Currently already synced to global change number '572', should be nothing to download
+[2026-10-14 19:53:54] [AppID 7] Download complete in build list
+[2026-10-14 19:53:54] [AppID 7] Successfully synced to ChangeNumber 0
+[2026-10-14 19:53:54] [Roaming Config] OnRemoteStorageSyncedClient() - result OK
+[2026-10-14 19:53:54] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-14 19:53:57] [AppID 1281930] Starting sync (init,)
+[2026-10-14 19:53:57] [AppID 1281930] AutoCloud checking local state for user 1256002322
+[2026-10-14 19:53:57] [U:1:1256002322] [AppID 1281930] Init cache request complete
+[2026-10-14 19:53:57] [AppID 1281930] YldWriteCacheDirectoryToFile - empty vector, deleting 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/1281930/remotecache.vdf'
+[2026-10-14 19:53:57] [AppID 1281930] UGC Upload OK for file previewfile_3819271557.gif
+
+
+[2026-10-14 20:12:39] Client version: 1791918946
+[2026-10-14 20:12:39] [AppID 7] Starting sync (init,)
+[2026-10-14 20:12:39] [AppID 7] AutoCloud checking local state for user 1256002322
+[2026-10-14 20:12:39] [U:1:1256002322] [AppID 7] Init cache request complete
+[2026-10-14 20:12:39] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-14 20:12:42] [Roaming Config] PerformSyncCloud - evaluating sync state
+[2026-10-14 20:12:42] [AppID 7] Starting sync (eval,)
+[2026-10-14 20:12:42] [AppID 7] AutoCloud checking local state for user 1256002322
+[2026-10-14 20:12:42] [AppID 7] Currently already synced to global change number '572', should be nothing to download
+[2026-10-14 20:12:42] [AppID 7] File is in sync serverbrowser_hist.vdf
+[2026-10-14 20:12:42] [AppID 7] File is in sync sharedconfig.vdf
+[2026-10-14 20:12:42] [AppID 7] Eval complete
+[2026-10-14 20:12:42] [Roaming Config] OnRemoteStorageStateEvaluated - result OK
+[2026-10-14 20:12:42] [AppID 7] Starting sync (down,)
+[2026-10-14 20:12:42] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-14 20:12:42] [AppID 7] Currently already synced to global change number '572', should be nothing to download
+[2026-10-14 20:12:42] [AppID 7] Download complete in build list
+[2026-10-14 20:12:42] [AppID 7] Successfully synced to ChangeNumber 0
+[2026-10-14 20:12:42] [Roaming Config] OnRemoteStorageSyncedClient() - result OK
+[2026-10-14 20:12:43] [AppID 7] YldWriteCacheDirectoryToFile - saved to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/7/remotecache.vdf'
+[2026-10-14 20:12:44] [AppID 1281930] Starting sync (init,)
+[2026-10-14 20:12:44] [AppID 1281930] AutoCloud checking local state for user 1256002322
+[2026-10-14 20:12:44] [U:1:1256002322] [AppID 1281930] Init cache request complete
+[2026-10-14 20:12:44] [AppID 1281930] YldWriteCacheDirectoryToFile - empty vector, deleting 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/userdata/1256002322/1281930/remotecache.vdf'
+[2026-10-14 20:12:44] [AppID 1281930] UGC Upload OK for file previewfile_3819271557.gif

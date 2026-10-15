@@ -1,23 +1,49 @@
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[b]Vanity Studio[/b]
-
+[hr][/hr]
+⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/mascot.png[/img]
+ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[b]Vanity Studio[/b]
+⠀
+[hr][/hr]
+⠀
 ⠀⠀⠀⠀⠀⠀⠀[i]Lets you draw your own clothing and accessories right inside the game[/i]
 
-⠀Open the inventory and click the colour wheel button where the achievement advisor used to be (the little switch under it brings the advisor back)
+⠀[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/inventory.png[/img] Open the inventory and click the colour wheel button where the achievement advisor used to be (the little switch under it brings the advisor back)
 
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[b]Feature[/b]
-[list]
-[*] Paint head, body, leg, front and back pieces on a vanilla-sized canvas, with layers, opacity and a timeline for animated outfits
-[*] Every pose the character can be in (standing, walking, jumping, flying, swinging) is previewed live, and any pose can get its own drawing
-[*] Copy the sprite of armor you're wearing and repaint it: stats stay exactly the same, only the look changes
-[*] Designs are saved outside your character and world, so every character on every world and server can wear them
-[*] [b]Other players on the server see what you wear, and see your changes while you draw[/b]
-[*] Export to a vanilla-layout sprite sheet, or share .vsd files with friends
-[/list]
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/features.png[/img] 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[b]Feature[/b]
+⠀
+⠀
+[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/paint.png[/img] Paint head, body, leg, front and back pieces on a vanilla-sized canvas, with layers, opacity and a timeline for animated outfits
+⠀
+⠀
+[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/poses.png[/img] Every pose the character can be in (standing, walking, jumping, flying, swinging) is previewed live, and any pose can get its own drawing
+⠀
+⠀
+[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/armor.png[/img] Copy the sprite of armor you're wearing and repaint it: stats stay exactly the same, only the look changes
+⠀
+⠀
+[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/saved.png[/img] Designs are saved outside your character and world, so every character on every world and server can wear them
+⠀
+⠀
+[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/multiplayer.png[/img] [b]Other players on the server see what you wear, and see your changes while you draw[/b]
+⠀
+⠀
+[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/export.png[/img] Export to a vanilla-layout sprite sheet, or share .vsd files with friends
+⠀
+⠀
+[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/workshop.png[/img] Global User Workshop
+⠀
+⠀
+[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/chinese.png[/img] Chinese Language Support 
+⠀
+⠀
+[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/glow.png[/img] Creating Glowing Pixels
 
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[b]Future Plans[/b]
+⠀
+[hr][/hr]
 
-[list]
-[*]Chinese Language Support 
-[*]Creating Glowing Pixels
-[*]Global User Workshop
-[/list]
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[img]https://raw.githubusercontent.com/myangell5522/VanityStudioWorkshop/main/assets/description/plans.png[/img] [b]Future Plans[/b]
+
+[b][list]
+[*]Added Support for custom non-humanoid races that add their own race-specific
+[/list][/b]

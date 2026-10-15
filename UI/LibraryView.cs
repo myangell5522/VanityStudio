@@ -20,56 +20,90 @@ namespace VanityStudio.UI
 		private static int scroll;
 		private static Guid armedDelete;
 		private static int filter = -1;
+		public static void ResetFilter() => filter = -1;
 		private static uint armedAt;
+
+		/// <summary>"My designs" / "Studio Workshop" switch, shared by both views.</summary>
+		public static void DrawTabs(ref int x, int y) {
+			string mine = L.Get("TabMine", DesignLibrary.All.Count), ws = L.Get("TabWorkshop");
+			var a = new Rectangle(x, y, Gui.IconTextWidth(mine), 30);
+			if (Gui.IconTextButton(a, Icons.Library, mine, "tab-mine", !StudioState.WorkshopTab))
+				StudioState.WorkshopTab = false;
+			var b = new Rectangle(a.Right + 4, y, Gui.IconTextWidth(ws), 30);
+			if (Gui.IconTextButton(b, Icons.Globe, ws, "tab-ws", StudioState.WorkshopTab, L.Get("TipWorkshop")))
+				StudioState.WorkshopTab = true;
+			x = b.Right + 12;
+		}
+
+		// filter values: -1 all, 0..4 wearable slots, 10 + DesignKind for retextures
+		private static bool Matches(Design d, int f) => f < 0 || (f < 10 ? d.IsWearable && (int)d.Slot == f : !d.IsWearable && (int)d.Kind == f - 10);
 
 		public static void Draw(Rectangle area) {
 			Gui.Panel(area);
-			var all = DesignLibrary.Newest.Where(d => filter < 0 || (int)d.Slot == filter).ToList();
+			var all = DesignLibrary.Newest.Where(d => Matches(d, filter)).ToList();
 
 			int x = area.X + 10, y = area.Y + 10;
-			Gui.Text(L.Get("LibraryTitle", all.Count), new Vector2(x, y + 15), Color.White, 0.9f, 0f, 0.5f);
+			DrawTabs(ref x, y);
 
 			int bx = area.Right - 10;
 			Rectangle Btn(string label) {
-				int w = (int)Gui.Measure(label).X + 26;
+				int w = Gui.IconTextWidth(label);
 				bx -= w;
 				var r = new Rectangle(bx, y, w, 30);
 				bx -= 6;
 				return r;
 			}
-			if (Gui.Button(Btn(L.Get("OpenFolder")), L.Get("OpenFolder"), "lib-folder")) {
+			if (Gui.IconTextButton(Btn(L.Get("OpenFolder")), Icons.Folder, L.Get("OpenFolder"), "lib-folder")) {
 				System.IO.Directory.CreateDirectory(DesignLibrary.Root);
 				Utils.OpenFolder(DesignLibrary.Root);
 			}
-			if (Gui.Button(Btn(L.Get("ImportFile")), L.Get("ImportFile"), "lib-import", false, true, L.Get("TipImport")))
+			if (Gui.IconTextButton(Btn(L.Get("ImportFile")), Icons.Import, L.Get("ImportFile"), "lib-import", false, L.Get("TipImport")))
 				StudioWindow.ImportFile();
 
 			y += 40;
-			Gui.Text(L.Get("NewFor"), new Vector2(x, y + 15), Gui.Muted, 0.8f, 0f, 0.5f);
-			int nx = x + (int)Gui.Measure(L.Get("NewFor")).X + 12;
+			// new: something to wear (five slots) or a new look for something in the game
+			Gui.Text(L.Get("NewWear"), new Vector2(x, y + 15), Gui.Muted, 0.78f, 0f, 0.5f);
+			int nx = x + (int)Gui.Measure(L.Get("NewWear"), 0.78f).X + 10;
 			for (int i = 0; i < Slots.Count; i++) {
 				var s = (DesignSlot)i;
-				int nw = (int)Gui.Measure("+ " + L.Slot(s)).X + 26;
-				var r = new Rectangle(nx, y, nw, 30);
-				if (Gui.Button(r, "+ " + L.Slot(s), "new" + i, false, true, L.Get("TipNewFor", L.Slot(s)))) {
+				if (Gui.IconButton(new Rectangle(nx, y, 32, 30), Icons.ForSlot(s), "new" + i, L.Get("TipNewFor", L.Slot(s)))) {
 					StudioState.NewDesign(s);
 					StudioState.LibraryOpen = false;
 					return;
 				}
-				nx += nw + 6;
+				nx += 34;
+			}
+			nx += 16;
+			Gui.Text(L.Get("NewRetexture"), new Vector2(nx, y + 15), Gui.Muted, 0.78f, 0f, 0.5f);
+			nx += (int)Gui.Measure(L.Get("NewRetexture"), 0.78f).X + 10;
+			foreach (var (kind, key) in new[] { (DesignKind.Item, "KindItem"), (DesignKind.NPC, "KindNPCBoss"), (DesignKind.Projectile, "KindProjectile") }) {
+				string label = L.Get(key);
+				var r = new Rectangle(nx, y, Gui.IconTextWidth(label, 0.75f), 30);
+				if (Gui.IconTextButton(r, Icons.ForKind(kind), label, "newr" + kind, false, L.Get("TipNewRetexture"), true, 0.75f)) {
+					TargetPicker.Open(kind);
+					return;
+				}
+				nx = r.Right + 4;
 			}
 
 			y += 40;
-			Gui.Text(L.Get("Show"), new Vector2(x, y + 15), Gui.Muted, 0.8f, 0f, 0.5f);
-			int fx = x + (int)Gui.Measure(L.Get("Show")).X + 12;
-			for (int i = -1; i < Slots.Count; i++) {
-				string label = i < 0 ? L.Get("FilterAll") : L.Slot((DesignSlot)i);
-				int fw = (int)Gui.Measure(label).X + 24;
-				int count = DesignLibrary.All.Count(d => i < 0 || (int)d.Slot == i);
-				if (Gui.Button(new Rectangle(fx, y, fw, 30), label, "filter" + i, filter == i, true, count.ToString()))
-					filter = i;
-				fx += fw + 4;
+			int fx = x;
+			void Filter(int value, int icon, string tip) {
+				int count = DesignLibrary.All.Count(d => Matches(d, value));
+				if (Gui.IconButton(new Rectangle(fx, y, 32, 30), icon, "filter" + value, tip + " (" + count + ")", filter == value)) {
+					filter = value;
+					scroll = 0;
+				}
+				fx += 34;
 			}
+			Gui.Text(L.Get("Show"), new Vector2(fx, y + 15), Gui.Muted, 0.78f, 0f, 0.5f);
+			fx += (int)Gui.Measure(L.Get("Show"), 0.78f).X + 10;
+			Filter(-1, Icons.Library, L.Get("FilterAll"));
+			for (int i = 0; i < Slots.Count; i++)
+				Filter(i, Icons.ForSlot((DesignSlot)i), L.Slot((DesignSlot)i));
+			Filter(10 + (int)DesignKind.Item, Icons.Sword, L.Get("KindItem"));
+			Filter(10 + (int)DesignKind.NPC, Icons.Slime, L.Get("KindNPCBoss"));
+			Filter(10 + (int)DesignKind.Projectile, Icons.Projectile, L.Get("KindProjectile"));
 
 			y += 42;
 			var grid = new Rectangle(area.X + 8, y, area.Width - 16, area.Bottom - 8 - y);
@@ -110,7 +144,7 @@ namespace VanityStudio.UI
 		// returns true when the list changed under us and drawing should stop for this frame
 		private static bool DrawCard(Rectangle card, Design d, ref int built) {
 			bool current = d == StudioState.Doc;
-			bool equipped = StudioState.Local.IsEquipped(d);
+			bool equipped = StudioState.IsApplied(d);
 			bool hover = Gui.Free && Gui.Hover(card);
 			Gui.Panel(card, hover ? Gui.ButtonHover * 0.9f : Gui.PanelBlue * 0.55f, current ? Gui.Gold : hover ? Gui.Gold * 0.6f : Color.Black);
 
@@ -122,11 +156,14 @@ namespace VanityStudio.UI
 				var dst = new Rectangle(thumbArea.Center.X - tex.Width * scale / 2, thumbArea.Center.Y - tex.Height * scale / 2, tex.Width * scale, tex.Height * scale);
 				Gui.Sb.Draw(tex, dst, Color.White);
 			}
+			Gui.Icon(Icons.ForDesign(d), new Vector2(thumbArea.X + 11, thumbArea.Y + 11), Color.White, 0.8f);
 			if (equipped)
-				Gui.Icon(Icons.Shirt, new Vector2(thumbArea.Right - 10, thumbArea.Y + 10), Gui.Gold, 0.8f);
+				Gui.Icon(d.IsWearable ? Icons.Shirt : Icons.Check, new Vector2(thumbArea.Right - 10, thumbArea.Y + 10), Gui.Gold, 0.8f);
 
 			Gui.Text(Gui.Fit(d.Name, card.Width - 16, 0.8f), new Vector2(card.X + 8, thumbArea.Bottom + 12), Color.White, 0.8f, 0f, 0.5f);
-			string info = L.Slot(d.Slot) + (d.FrameCount > 1 ? " · " + L.Get("FramesN", d.FrameCount) : "");
+			string info = (d.IsWearable ? L.Slot(d.Slot) : string.IsNullOrEmpty(d.BasedOn) ? L.Get("Kind" + d.Kind) : d.BasedOn)
+				+ (d.FrameCount > 1 ? " · " + L.Get("FramesN", d.FrameCount) : "")
+				+ (string.IsNullOrEmpty(d.AuthorName) ? "" : " · " + d.AuthorName);
 			Gui.Text(info, new Vector2(card.X + 8, thumbArea.Bottom + 28), Gui.Muted, 0.7f, 0f, 0.5f);
 
 			if (!hover)
@@ -138,7 +175,13 @@ namespace VanityStudio.UI
 			var delBtn = new Rectangle(card.Right - 36, by, 28, 28);
 			bool armed = armedDelete == d.Id && Main.GameUpdateCount - armedAt < 180;
 
-			if (Gui.IconButton(equipBtn, Icons.Shirt, "lib-equip" + d.Id, equipped ? L.Get("TipUnequip") : L.Get("TipEquip"), equipped)) {
+			string equipTip = d.IsWearable ? (equipped ? L.Get("TipUnequip") : L.Get("TipEquip")) : (equipped ? L.Get("TipUnapply") : L.Get("TipApply"));
+			if (Gui.IconButton(equipBtn, d.IsWearable ? Icons.Shirt : Icons.Check, "lib-equip" + d.Id, equipTip, equipped)) {
+				if (!d.IsWearable) {
+					Retextures.SetEnabled(d, !equipped);
+					SoundEngine.PlaySound(equipped ? SoundID.Grab : SoundID.Item4);
+					return false;
+				}
 				var vp = StudioState.Local;
 				if (equipped)
 					vp.Unequip(d.Slot);
@@ -179,6 +222,7 @@ namespace VanityStudio.UI
 
 		private static void Delete(Design d) {
 			StudioState.Local.Forget(d.Id);
+			Retextures.Forget(d.Id);
 			// the open design must be dropped first, or switching away would autosave it straight back to disk
 			if (StudioState.Doc == d)
 				StudioState.Forget();
@@ -202,7 +246,7 @@ namespace VanityStudio.UI
 			if (built >= 3)
 				return null;
 			built++;
-			Color[] px = d.Flatten(0, Design.BasePose);
+			Color[] px = d.IsWearable ? d.Flatten(0, Design.BasePose) : d.Flatten(0, 0);
 			Texture2D tex = t.tex;
 			if (tex == null || tex.IsDisposed || tex.Width != d.Width || tex.Height != d.Height) {
 				if (tex != null && !tex.IsDisposed)

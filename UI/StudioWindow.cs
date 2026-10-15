@@ -18,7 +18,6 @@ namespace VanityStudio.UI
 		private const int RightColumn = 286;
 		private const int TimelineHeight = 160;
 
-		private static string nameEdit;
 		private static string renameText;
 		private static int renaming = -1;
 		private static int layerScroll, frameScroll;
@@ -34,9 +33,11 @@ namespace VanityStudio.UI
 			Main.LocalPlayer.mouseInterface = true;
 			PlayerInput.LockVanillaMouseScroll("VanityStudio/Studio");
 
-			Gui.Locked = Tutorial.Active;
+			Gui.Locked = Tutorial.Active || StudioState.Popup != Popup.None;
 			if (!Gui.Typing && !Tutorial.Active && Gui.EscapePressed) {
-				if (StudioState.LibraryOpen)
+				if (StudioState.Popup != Popup.None)
+					StudioState.Popup = Popup.None;
+				else if (StudioState.LibraryOpen)
 					StudioState.LibraryOpen = false;
 				else {
 					StudioState.ReopenInventory = true;
@@ -47,7 +48,7 @@ namespace VanityStudio.UI
 
 			Gui.Rect(new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * 0.45f);
 
-			int w = Math.Min(Main.screenWidth - 16, 1260), h = Math.Min(Main.screenHeight - 16, 760);
+			int w = Math.Min(Main.screenWidth - 16, 1280), h = Math.Min(Main.screenHeight - 16, 780);
 			var win = new Rectangle((Main.screenWidth - w) / 2, (Main.screenHeight - h) / 2, w, h);
 			Gui.Panel(win, new Color(33, 43, 79) * 0.97f, Color.Black);
 
@@ -56,16 +57,21 @@ namespace VanityStudio.UI
 			var right = new Rectangle(win.Right - 10 - RightColumn, bodyTop, RightColumn, win.Bottom - 10 - bodyTop);
 			var left = new Rectangle(win.X + 10, bodyTop, right.X - 8 - (win.X + 10), right.Height);
 
-			DrawHeader(header, d);
+			HeaderBar.Draw(header, d);
+			if (StudioState.Doc != d)
+				return;
 			var R = Tutorial.Regions;
 
 			if (StudioState.LibraryOpen) {
-				LibraryView.Draw(left);
+				if (StudioState.WorkshopTab)
+					WorkshopView.Draw(left);
+				else
+					LibraryView.Draw(left);
 			}
 			else {
 				var timeline = new Rectangle(left.X, left.Bottom - TimelineHeight, left.Width, TimelineHeight);
 				var tools = new Rectangle(left.X, left.Y, 44, timeline.Y - 8 - left.Y);
-				var poses = new Rectangle(tools.Right + 8, left.Y, left.Right - tools.Right - 8, 30);
+				var poses = new Rectangle(tools.Right + 8, left.Y, left.Right - tools.Right - 8, PoseBar.Height);
 				var canvas = new Rectangle(poses.X, poses.Bottom + 6, poses.Width, timeline.Y - 8 - poses.Bottom - 6);
 
 				R["tools"] = tools;
@@ -73,118 +79,44 @@ namespace VanityStudio.UI
 				R["canvas"] = canvas;
 				R["timeline"] = timeline;
 				DrawToolbar(tools);
-				DrawPoseStrip(poses, d);
+				PoseBar.Draw(poses, d);
 				DrawTimeline(timeline, d);
 				// canvas last so the panels above get first pick of the mouse
 				CanvasView.Draw(canvas);
 				DrawToast(canvas);
 			}
 
-			R["preview"] = new Rectangle(right.X, right.Y, right.Width, 268);
-			R["colors"] = new Rectangle(right.X, right.Y + 276, right.Width, right.Bottom - right.Y - 276);
-			int y = DrawPreview(new Rectangle(right.X, right.Y, right.Width, 268));
-			y = ColorPanel.Draw(new Rectangle(right.X, y + 8, right.Width, 196));
+			var preview = new Rectangle(right.X, right.Y, right.Width, PreviewPanel.Height);
+			R["preview"] = preview;
+			R["colors"] = new Rectangle(right.X, preview.Bottom + 8, right.Width, right.Bottom - preview.Bottom - 8);
+			PreviewPanel.Draw(preview, d);
+			int y = ColorPanel.Draw(new Rectangle(right.X, preview.Bottom + 8, right.Width, 196));
 			ColorPanel.DrawPalettes(new Rectangle(right.X, y + 4, right.Width, right.Bottom - y - 4));
 
-			if (!Tutorial.Active)
+			if (StudioState.LibraryOpen)
+				DrawToast(left);
+			Gui.FlushOverlays();
+
+			if (!Tutorial.Active && StudioState.Popup == Popup.None)
 				Shortcuts(d);
+
+			if (StudioState.Popup != Popup.None && !Tutorial.Active) {
+				Gui.Locked = false;
+				switch (StudioState.Popup) {
+					case Popup.Effects:
+						EffectsPopup.Draw(d);
+						break;
+					case Popup.Target:
+						TargetPicker.Draw();
+						break;
+					case Popup.Publish:
+						PublishDialog.Draw();
+						break;
+				}
+			}
 			Tutorial.Draw();
 			Gui.EndFrame();
 		}
-
-		#region header
-
-		private static void DrawHeader(Rectangle r, Design d) {
-			Texture2DIcon(new Vector2(r.X + 16, r.Center.Y));
-			Gui.Text("Vanity Studio", new Vector2(r.X + 36, r.Center.Y + 3), Color.White, 1f, 0f, 0.5f);
-			int x = r.X + 36 + (int)Gui.Measure("Vanity Studio", 1f).X + 18;
-
-			int leftStart = x;
-			if (Gui.Focus != "name")
-				nameEdit = d.Name;
-			if (Gui.TextBox(new Rectangle(x, r.Y + 2, 210, 30), "name", ref nameEdit, 40, L.Get("NamePlaceholder"))) {
-				string n = string.IsNullOrWhiteSpace(nameEdit) ? d.Name : nameEdit.Trim();
-				if (n != d.Name) {
-					StudioState.Snapshot();
-					d.Name = n;
-					StudioState.Changed();
-				}
-			}
-			x += 218;
-
-			int slotW = 0;
-			for (int i = 0; i < Slots.Count; i++)
-				slotW = Math.Max(slotW, (int)Gui.Measure("< " + L.Slot((DesignSlot)i) + " >").X + 28);
-			var slotRect = new Rectangle(x, r.Y + 2, slotW, 30);
-			if (Gui.Button(slotRect, "< " + L.Slot(d.Slot) + " >", "slot", false, true, L.Get("TipSlot"))) {
-				StudioState.Snapshot();
-				d.ChangeSlot((DesignSlot)(((int)d.Slot + 1) % Slots.Count));
-				StudioState.Changed();
-				CanvasView.ResetView = true;
-			}
-			else if (Gui.Hover(slotRect) && Gui.RightPressed) {
-				StudioState.Snapshot();
-				d.ChangeSlot((DesignSlot)(((int)d.Slot + Slots.Count - 1) % Slots.Count));
-				StudioState.Changed();
-				CanvasView.ResetView = true;
-				Gui.RightPressed = false;
-			}
-			x += slotW + 8;
-
-			bool hide = d.HideVanilla;
-			int hideW = (int)Gui.Measure(L.Get("HideVanilla")).X + 30;
-			Tutorial.Regions["header-left"] = new Rectangle(leftStart, r.Y, x + hideW - leftStart, r.Height);
-			if (Gui.Toggle(new Rectangle(x, r.Y + 2, hideW, 30), L.Get("HideVanilla"), "hide", ref hide, L.Get("TipHideVanilla"))) {
-				StudioState.Snapshot();
-				d.HideVanilla = hide;
-				StudioState.Changed();
-			}
-
-			int bx = r.Right - 32;
-			Rectangle Next(int gap = 4) {
-				var b = new Rectangle(bx, r.Y + 1, 32, 32);
-				bx -= 32 + gap;
-				return b;
-			}
-
-			if (Gui.IconButton(Next(12), Icons.Close, "close", L.Get("TipClose"))) {
-				StudioState.Close();
-				return;
-			}
-			if (Gui.IconButton(Next(12), Icons.Help, "help", L.Get("TipHelp")))
-				Tutorial.Start();
-			bool equipped = StudioState.Local.IsEquipped(d);
-			var equipRect = Next();
-			Tutorial.Regions["equip"] = equipRect;
-			int actionsRight = equipRect.Right;
-			if (Gui.IconButton(equipRect, Icons.Shirt, "equip", equipped ? L.Get("TipUnequip") : L.Get("TipEquip"), equipped))
-				StudioState.Equip();
-			if (Gui.IconButton(Next(), Icons.Export, "export", L.Get("TipExport")))
-				Export(d);
-			if (Gui.IconButton(Next(), Icons.Import, "import", L.Get("TipImport")))
-				ImportFile();
-			if (Gui.IconButton(Next(), Icons.Reference, "from-equipped", L.Get("TipFromEquipped")))
-				ImportEquipped(d);
-			if (Gui.IconButton(Next(), Icons.Save, "save", L.Get("TipSave"))) {
-				DesignLibrary.Save(d);
-				StudioState.Notify(L.Get("Saved"));
-			}
-			if (Gui.IconButton(Next(12), Icons.Library, "library", L.Get("TipLibrary"), StudioState.LibraryOpen))
-				StudioState.LibraryOpen = !StudioState.LibraryOpen;
-			if (Gui.IconButton(Next(), Icons.Redo, "redo", L.Get("TipRedo"), false, StudioState.CanRedo))
-				StudioState.Redo();
-			if (Gui.IconButton(Next(), Icons.Undo, "undo", L.Get("TipUndo"), false, StudioState.CanUndo))
-				StudioState.Undo();
-			Tutorial.Regions["actions"] = new Rectangle(bx + 36, r.Y, actionsRight - bx - 36, r.Height);
-		}
-
-		private static void Texture2DIcon(Vector2 center) {
-			var tex = ModContent.Request<Microsoft.Xna.Framework.Graphics.Texture2D>("VanityStudio/Assets/Mascot").Value;
-			float s = 30f / Math.Max(tex.Width, tex.Height);
-			Gui.Sb.Draw(tex, center, null, Color.White, 0f, tex.Size() / 2f, s, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f);
-		}
-
-		#endregion
 
 		#region toolbar
 
@@ -230,80 +162,6 @@ namespace VanityStudio.UI
 			if (Gui.Hover(refRect) && Gui.Scroll != 0) {
 				StudioState.ReferenceAlpha = Math.Clamp(StudioState.ReferenceAlpha + Math.Sign(Gui.Scroll) * 0.05f, 0.1f, 1f);
 				Gui.Scroll = 0;
-			}
-		}
-
-		#endregion
-
-		#region poses
-
-		private static void DrawPoseStrip(Rectangle r, Design d) {
-			Gui.Panel(r);
-			int x = r.X + 6, y = r.Y + 3;
-			int h = r.Height - 6;
-
-			// 20 legacy frames: stand, 4 swing frames, jump, 14 walk frames
-			int Wide(string s) => (int)Gui.Measure(s, 0.75f).X + 20;
-			int baseW = (int)Gui.Measure(L.Get("PoseBase")).X + 26;
-			int standW = Wide(L.Get("PoseStand")), jumpW = Wide(L.Get("PoseJump"));
-			int useLabel = (int)Gui.Measure(L.Get("GroupUse"), 0.7f).X + 6, walkLabel = (int)Gui.Measure(L.Get("GroupWalk"), 0.7f).X + 6;
-			int available = r.Width - 12;
-			bool labels = true;
-			int Cell() => (available - baseW - 10 - standW - 2 - 8 - (labels ? useLabel + walkLabel : 0) - 8 - jumpW - 2 - 8) / 18 - 2;
-			int cell = Cell();
-			if (cell < 16) {
-				labels = false;
-				cell = Cell();
-			}
-			cell = Math.Clamp(cell, 12, 26);
-
-			if (Gui.Button(new Rectangle(x, y, baseW, h), L.Get("PoseBase"), "pose-base", StudioState.Pose < 0, true, L.Get("TipPoseBase")))
-				StudioState.Pose = Design.BasePose;
-			x += baseW + 10;
-
-			PoseButton(ref x, y, standW, h, 0, L.Get("PoseStand"), d);
-			x += 8;
-			if (labels) {
-				Gui.Text(L.Get("GroupUse"), new Vector2(x, y + h / 2 + 2), Gui.Muted, 0.7f, 0f, 0.5f);
-				x += useLabel;
-			}
-			for (int i = 1; i <= 4; i++)
-				PoseButton(ref x, y, cell, h, i, i.ToString(), d);
-			x += 8;
-			PoseButton(ref x, y, jumpW, h, 5, L.Get("PoseJump"), d);
-			x += 8;
-			if (labels) {
-				Gui.Text(L.Get("GroupWalk"), new Vector2(x, y + h / 2 + 2), Gui.Muted, 0.7f, 0f, 0.5f);
-				x += walkLabel;
-			}
-			for (int i = 6; i < Design.PoseCount; i++)
-				PoseButton(ref x, y, cell, h, i, (i - 5).ToString(), d);
-		}
-
-		private static void PoseButton(ref int x, int y, int w, int h, int pose, string label, Design d) {
-			var r = new Rectangle(x, y, w, h);
-			x += w + 2;
-			bool selected = StudioState.Pose == pose;
-			bool hasOverride = d.HasOverride(StudioState.Frame, pose);
-			bool hover = Gui.Free && Gui.Hover(r);
-			Gui.Slot(r, selected, hover);
-			Gui.Text(label, new Vector2(r.Center.X, r.Center.Y + 2), hasOverride ? Color.White : Gui.Muted, 0.7f, 0.5f, 0.5f);
-			if (hasOverride)
-				Gui.Rect(new Rectangle(r.Right - 5, r.Y + 3, 3, 3), Gui.Gold);
-			if (!hover)
-				return;
-			Gui.MarkHover("pose" + pose, L.Pose(pose) + "\n" + (hasOverride ? L.Get("TipPoseOverride") : L.Get("TipPoseInherit")));
-			if (Gui.LeftPressed) {
-				StudioState.Pose = selected ? Design.BasePose : pose;
-				Gui.LeftPressed = false;
-				SoundEngine.PlaySound(SoundID.MenuTick);
-			}
-			else if (Gui.RightPressed && hasOverride) {
-				StudioState.Snapshot();
-				d.ClearOverride(StudioState.Frame, pose);
-				StudioState.Changed();
-				Gui.RightPressed = false;
-				SoundEngine.PlaySound(SoundID.Grab);
 			}
 		}
 
@@ -531,7 +389,8 @@ namespace VanityStudio.UI
 
 			var eye = new Rectangle(r.X + 2, r.Y, 22, r.Height);
 			Gui.Icon(l.Visible ? Icons.Eye : Icons.EyeOff, eye.Center.ToVector2(), Color.White, 0.8f);
-			var nameRect = new Rectangle(r.X + 26, r.Y, r.Width - 70, r.Height);
+			var fx = new Rectangle(r.Right - 66, r.Y, 22, r.Height);
+			var nameRect = new Rectangle(r.X + 26, r.Y, r.Width - 96, r.Height);
 
 			if (renaming == li) {
 				if (Gui.TextBox(new Rectangle(nameRect.X, r.Y - 3, nameRect.Width, r.Height + 6), "rename", ref renameText, 24)) {
@@ -550,9 +409,22 @@ namespace VanityStudio.UI
 				Gui.Text(Gui.Fit(l.Name, nameRect.Width, 0.75f), new Vector2(nameRect.X, r.Center.Y + 2), l.Visible ? Color.White : Gui.Muted, 0.75f, 0f, 0.5f);
 			}
 			Gui.Text((int)Math.Round(l.Opacity * 100) + "%", new Vector2(r.Right - 6, r.Center.Y + 2), Gui.Muted, 0.65f, 1f, 0.5f);
+			// effects: a wand that lights up gold, plus little badges for what's on
+			int badge = l.Glow || l.Pulse ? Icons.Star : !string.IsNullOrEmpty(l.Dye) ? Icons.Drop : l.Dust >= 0 && l.DustRate > 0 ? Icons.Sparkles : Icons.Wand;
+			Gui.Icon(badge, fx.Center.ToVector2(), l.HasEffects ? Gui.Gold : Color.White * 0.55f, 0.8f);
 
 			if (!hover || renaming == li)
 				return;
+			if (Gui.Hover(fx)) {
+				Gui.Tip = L.Get("TipEffects");
+				if (Gui.LeftPressed) {
+					Gui.LeftPressed = false;
+					StudioState.Layer = li;
+					EffectsPopup.Open();
+					SoundEngine.PlaySound(SoundID.MenuOpen);
+				}
+				return;
+			}
 			if (Gui.Hover(eye)) {
 				Gui.Tip = L.Get("TipVisible");
 				if (Gui.LeftPressed) {
@@ -614,52 +486,6 @@ namespace VanityStudio.UI
 
 		#endregion
 
-		#region preview
-
-		private static int DrawPreview(Rectangle r) {
-			Gui.Panel(r);
-			var stage = new Rectangle(r.X + 8, r.Y + 8, r.Width - 16, 196);
-			Gui.Rect(stage, new Color(22, 26, 52));
-			// a hint of sky and a floor, like the character-select backdrop
-			for (int i = 0; i < 6; i++)
-				Gui.Rect(new Rectangle(stage.X, stage.Y + i * 12, stage.Width, 12), new Color(70, 90, 160) * (0.22f - i * 0.035f));
-			Gui.Rect(new Rectangle(stage.X, stage.Bottom - 20, stage.Width, 20), new Color(40, 34, 30));
-			Gui.Rect(new Rectangle(stage.X, stage.Bottom - 20, stage.Width, 3), new Color(94, 140, 60));
-			Gui.Outline(stage, Color.Black * 0.7f);
-
-			Player dummy = StudioState.Dummy;
-			if (dummy != null) {
-				int pose = StudioState.PreviewPoseNow(out bool flying);
-				StudioState.SetDummyPose(pose);
-				float lift = flying ? (float)Math.Sin(Main.GlobalTimeWrappedHourly * 3f) * 4f + 12f : pose == 5 ? 14f : 0f;
-				Gui.BeginClip(stage, immediate: true);
-				Gui.DrawPlayer(dummy, new Vector2(stage.Center.X, stage.Bottom - 20 - lift), StudioSettings.PreviewScale);
-				Gui.EndClip();
-			}
-			if (Gui.Free && Gui.Hover(stage)) {
-				Gui.Tip = L.Get("TipPreview", StudioSettings.PreviewScale);
-				if (Gui.Scroll != 0) {
-					StudioSettings.PreviewScale = Math.Clamp(StudioSettings.PreviewScale + Math.Sign(Gui.Scroll), 2, 4);
-					Gui.Scroll = 0;
-				}
-			}
-
-			if (Gui.IconButton(new Rectangle(stage.Right - 30, stage.Y + 4, 26, 26), Icons.Flip, "turn", L.Get("TipTurn")))
-				StudioState.PreviewDirection = -StudioState.PreviewDirection;
-
-			string[] names = { "PvAuto", "PvIdle", "PvWalk", "PvJump", "PvFly", "PvUse", "PvPose" };
-			int bw = (r.Width - 16 - 3 * 4) / 4;
-			for (int i = 0; i < names.Length; i++) {
-				int col = i % 4, row = i / 4;
-				var b = new Rectangle(r.X + 8 + col * (bw + 4), stage.Bottom + 6 + row * 29, bw, 26);
-				if (Gui.Button(b, L.Get(names[i]), "pv" + i, (int)StudioState.Preview == i))
-					StudioState.Preview = (PreviewMode)i;
-			}
-			return r.Bottom;
-		}
-
-		#endregion
-
 		private static void DrawToast(Rectangle canvas) {
 			if (StudioState.ToastTime <= 0 || string.IsNullOrEmpty(StudioState.Toast))
 				return;
@@ -677,6 +503,7 @@ namespace VanityStudio.UI
 				DesignLibrary.Save(d);
 				string png = SheetIO.Export(d);
 				StudioState.Notify(L.Get("Exported", Path.GetFileName(png)));
+				Utils.OpenFolder(png);
 				Main.NewText(L.Get("ExportedChat", png), Gui.Gold);
 			}
 			catch (Exception e) {
@@ -707,7 +534,7 @@ namespace VanityStudio.UI
 				Color[] px = SheetIO.ReadPng(path, out int w, out int h);
 				Design d = StudioState.Doc;
 				StudioState.Snapshot();
-				int layer = SheetIO.ImportImage(d, px, w, h, Path.GetFileNameWithoutExtension(path), StudioState.Frame);
+				int layer = SheetIO.ImportImage(d, px, w, h, Path.GetFileNameWithoutExtension(path), StudioState.Frame, StudioState.Pose);
 				if (layer < 0) {
 					StudioState.Notify(L.Get("TooManyLayers"));
 					return;
@@ -724,6 +551,25 @@ namespace VanityStudio.UI
 		}
 
 		internal static void ImportEquipped(Design d) {
+			if (!d.IsWearable) {
+				int type = Targets.Resolve(d.Kind, d.Target);
+				int tw = 0, th = 0;
+				Color[] px = type > 0 ? SheetIO.SheetFromTarget(d.Kind, type, out tw, out th) : null;
+				if (px == null) {
+					StudioState.Notify(L.Get("NoSprite"));
+					return;
+				}
+				StudioState.Snapshot();
+				int li = SheetIO.ImportImage(d, px, tw, th, d.BasedOn, StudioState.Frame, StudioState.Pose);
+				if (li < 0) {
+					StudioState.Notify(L.Get("TooManyLayers"));
+					return;
+				}
+				StudioState.Layer = li;
+				StudioState.Changed();
+				StudioState.Notify(L.Get("ImportedEquipped", d.BasedOn));
+				return;
+			}
 			Color[] sheet;
 			string itemName;
 			try {
@@ -745,6 +591,8 @@ namespace VanityStudio.UI
 				return;
 			}
 			StudioState.Layer = layer;
+			if (string.IsNullOrEmpty(d.BasedOn))
+				d.BasedOn = itemName;
 			StudioState.Changed();
 			StudioState.Notify(L.Get("ImportedEquipped", itemName));
 		}
@@ -771,6 +619,8 @@ namespace VanityStudio.UI
 			}
 			if (StudioState.LibraryOpen)
 				return;
+			if (Gui.KeyPressed(Keys.Tab))
+				PoseBar.Step(d, Gui.Shift ? -1 : 1);
 			if (Gui.KeyPressed(Keys.B)) StudioState.Tool = Tool.Pencil;
 			if (Gui.KeyPressed(Keys.E)) StudioState.Tool = Tool.Eraser;
 			if (Gui.KeyPressed(Keys.G)) StudioState.Tool = Tool.Fill;

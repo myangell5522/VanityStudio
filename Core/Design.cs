@@ -9,20 +9,53 @@ namespace VanityStudio.Core
 {
 	public readonly record struct CelKey(int Frame, int Pose);
 
+	/// <summary>What a design is drawn as: something worn, or a replacement sprite for an item, an NPC/boss or a projectile.</summary>
+	public enum DesignKind : byte
+	{
+		Wearable,
+		Item,
+		NPC,
+		Projectile
+	}
+
 	public sealed class DesignLayer
 	{
 		public string Name = "Layer";
 		public float Opacity = 1f;
 		public bool Visible = true;
+
+		// effects
+		public bool Glow;          // ignores lighting, like a glowmask
+		public bool Pulse;         // glow breathes in and out
+		public string Dye = "";    // full name of a dye item whose shader is applied to this layer
+		public int Dust = -1;      // vanilla dust type thrown off this layer's pixels
+		public float DustRate;     // 0..1, chance per tick
+
 		public readonly Dictionary<CelKey, Color[]> Cels = new();
 
 		public Color[] Get(int frame, int pose) => Cels.TryGetValue(new CelKey(frame, pose), out var c) ? c : null;
 
+		public bool HasEffects => Glow || Pulse || !string.IsNullOrEmpty(Dye) || Dust >= 0 && DustRate > 0f;
+
+		// layers with the same signature can share one draw call
+		public (bool, bool, string, int, float) Signature => (Glow, Pulse, Dye ?? "", DustRate > 0f ? Dust : -1, DustRate > 0f && Dust >= 0 ? DustRate : 0f);
+
 		public DesignLayer Clone() {
-			var copy = new DesignLayer { Name = Name, Opacity = Opacity, Visible = Visible };
+			var copy = new DesignLayer {
+				Name = Name, Opacity = Opacity, Visible = Visible,
+				Glow = Glow, Pulse = Pulse, Dye = Dye, Dust = Dust, DustRate = DustRate
+			};
 			foreach (var pair in Cels)
 				copy.Cels[pair.Key] = (Color[])pair.Value.Clone();
 			return copy;
+		}
+
+		public void CopyEffectsFrom(DesignLayer o) {
+			Glow = o.Glow;
+			Pulse = o.Pulse;
+			Dye = o.Dye;
+			Dust = o.Dust;
+			DustRate = o.DustRate;
 		}
 	}
 
@@ -32,13 +65,29 @@ namespace VanityStudio.Core
 		public const int PoseCount = 20;
 		public const int MaxFrames = 24;
 		public const int MaxLayers = 24;
-		private const int FileVersion = 1;
+		public const int MaxSide = 512;
+		private const int FileVersion = 2;
 
 		public Guid Id = Guid.NewGuid();
 		public string Name = "Untitled";
+		public DesignKind Kind;
 		public DesignSlot Slot;
 		public bool HideVanilla;
 		public int Width = 40, Height = 56;
+
+		// legacy player frames for wearables (always 20), sheet frames for retextures
+		public int Rows = PoseCount;
+
+		// retextures: what gets replaced, e.g. "Terraria/CopperShortsword" or "SomeMod/SomeBoss"
+		public string Target = "";
+		// display name of what this was copied from ("Copper Shortsword", "Iron Chainmail"); empty for originals
+		public string BasedOn = "";
+		public string Description = "";
+		public string AuthorName = "";
+		public ulong AuthorId;
+		// set on designs downloaded from the Studio Workshop
+		public string WorkshopId = "";
+
 		public List<int> FrameTimes = new() { 120 };
 		public List<DesignLayer> Layers = new();
 		public long Modified = DateTime.UtcNow.Ticks;
@@ -47,10 +96,22 @@ namespace VanityStudio.Core
 		public int Revision;
 
 		public int FrameCount => FrameTimes.Count;
+		public bool IsWearable => Kind == DesignKind.Wearable;
+		public bool Bobs => IsWearable && Slots.Bobs(Slot);
 
 		public static Design Create(DesignSlot slot, string name) {
 			Point size = Slots.CanvasSize(slot);
 			var d = new Design { Name = name, Slot = slot, Width = size.X, Height = size.Y };
+			d.Layers.Add(new DesignLayer { Name = "Layer 1" });
+			return d;
+		}
+
+		public static Design CreateRetexture(DesignKind kind, string target, string targetName, int frameW, int frameH, int rows, string name) {
+			var d = new Design {
+				Name = name, Kind = kind, Target = target, BasedOn = targetName,
+				Width = Math.Clamp(frameW, 1, MaxSide), Height = Math.Clamp(frameH, 1, MaxSide),
+				Rows = Math.Clamp(rows, 1, 64)
+			};
 			d.Layers.Add(new DesignLayer { Name = "Layer 1" });
 			return d;
 		}
@@ -91,6 +152,20 @@ namespace VanityStudio.Core
 				l.Cels.Remove(key);
 		}
 
+		/// <summary>Copies one pose's drawing (every layer, this frame) onto another pose as its own override.</summary>
+		public void CopyPose(int frame, int from, int to) {
+			if (from == to || to < 0)
+				return;
+			foreach (var l in Layers) {
+				Color[] src = LayerPixels(l, frame, from);
+				var key = new CelKey(frame, to);
+				if (src == null)
+					l.Cels.Remove(key);
+				else
+					l.Cels[key] = (Color[])src.Clone();
+			}
+		}
+
 		public Color[] Flatten(int frame, int pose, int skipLayer = -1) {
 			var result = NewBuffer();
 			for (int i = 0; i < Layers.Count; i++) {
@@ -115,7 +190,7 @@ namespace VanityStudio.Core
 			Color[] b = l.Get(frame, BasePose);
 			if (b == null)
 				return null;
-			int bob = Slots.Bobs(Slot) ? Slots.BobFor(pose) : 0;
+			int bob = Bobs ? Slots.BobFor(pose) : 0;
 			return bob == 0 ? b : Pixels.Shifted(b, Width, Height, 0, bob);
 		}
 
@@ -124,12 +199,12 @@ namespace VanityStudio.Core
 			if (HasOverride(frame, pose))
 				return Flatten(frame, pose);
 			Color[] flat = Flatten(frame, BasePose);
-			int bob = Slots.Bobs(Slot) ? Slots.BobFor(pose) : 0;
+			int bob = Bobs ? Slots.BobFor(pose) : 0;
 			return bob == 0 ? flat : Pixels.Shifted(flat, Width, Height, 0, bob);
 		}
 
 		public void ChangeSlot(DesignSlot slot) {
-			if (slot == Slot)
+			if (slot == Slot || !IsWearable)
 				return;
 			Point size = Slots.CanvasSize(slot);
 			if (size.X != Width || size.Y != Height) {
@@ -234,6 +309,16 @@ namespace VanityStudio.Core
 			w.Write((ushort)Width);
 			w.Write((ushort)Height);
 			w.Write(Modified);
+			// v2
+			w.Write((byte)Kind);
+			w.Write((byte)Rows);
+			w.Write(Target ?? "");
+			w.Write(BasedOn ?? "");
+			w.Write(Description ?? "");
+			w.Write(AuthorName ?? "");
+			w.Write(AuthorId);
+			w.Write(WorkshopId ?? "");
+
 			w.Write((byte)FrameCount);
 			foreach (int t in FrameTimes)
 				w.Write((ushort)Math.Clamp(t, 10, 60000));
@@ -242,6 +327,11 @@ namespace VanityStudio.Core
 				w.Write(l.Name ?? "");
 				w.Write(l.Opacity);
 				w.Write(l.Visible);
+				w.Write(l.Glow);
+				w.Write(l.Pulse);
+				w.Write(l.Dye ?? "");
+				w.Write((short)l.Dust);
+				w.Write(l.DustRate);
 				w.Write((ushort)l.Cels.Count);
 				foreach (var pair in l.Cels) {
 					w.Write((byte)pair.Key.Frame);
@@ -264,10 +354,25 @@ namespace VanityStudio.Core
 				Height = r.ReadUInt16(),
 				Modified = r.ReadInt64()
 			};
-			if (d.Width <= 0 || d.Height <= 0 || d.Width > 256 || d.Height > 256)
+			if (d.Width <= 0 || d.Height <= 0 || d.Width > MaxSide || d.Height > MaxSide)
 				throw new InvalidDataException("Bad canvas size");
 			if ((byte)d.Slot >= Slots.Count)
 				d.Slot = DesignSlot.Body;
+			if (version >= 2) {
+				d.Kind = (DesignKind)r.ReadByte();
+				if ((byte)d.Kind > (byte)DesignKind.Projectile)
+					d.Kind = DesignKind.Wearable;
+				d.Rows = Math.Clamp((int)r.ReadByte(), 1, 64);
+				d.Target = r.ReadString();
+				d.BasedOn = r.ReadString();
+				d.Description = r.ReadString();
+				d.AuthorName = r.ReadString();
+				d.AuthorId = r.ReadUInt64();
+				d.WorkshopId = r.ReadString();
+			}
+			if (d.IsWearable)
+				d.Rows = PoseCount;
+
 			int frames = r.ReadByte();
 			d.FrameTimes = new List<int>();
 			for (int i = 0; i < frames; i++)
@@ -277,12 +382,19 @@ namespace VanityStudio.Core
 			int layers = r.ReadByte();
 			for (int i = 0; i < layers; i++) {
 				var l = new DesignLayer { Name = r.ReadString(), Opacity = Math.Clamp(r.ReadSingle(), 0f, 1f), Visible = r.ReadBoolean() };
+				if (version >= 2) {
+					l.Glow = r.ReadBoolean();
+					l.Pulse = r.ReadBoolean();
+					l.Dye = r.ReadString();
+					l.Dust = r.ReadInt16();
+					l.DustRate = Math.Clamp(r.ReadSingle(), 0f, 1f);
+				}
 				int cels = r.ReadUInt16();
 				for (int c = 0; c < cels; c++) {
 					int frame = r.ReadByte();
 					int pose = r.ReadSByte();
 					Color[] px = ReadPixels(r, d.Width * d.Height);
-					if (frame < d.FrameCount && pose >= BasePose && pose < PoseCount)
+					if (frame < d.FrameCount && pose >= BasePose && pose < d.Rows)
 						l.Cels[new CelKey(frame, pose)] = px;
 				}
 				d.Layers.Add(l);
@@ -337,6 +449,11 @@ namespace VanityStudio.Core
 			HideVanilla = other.HideVanilla;
 			Width = other.Width;
 			Height = other.Height;
+			Kind = other.Kind;
+			Rows = other.Rows;
+			Target = other.Target;
+			BasedOn = other.BasedOn;
+			Description = other.Description;
 			FrameTimes = new List<int>(other.FrameTimes);
 			Layers = other.Layers.Select(l => l.Clone()).ToList();
 			Touch();
@@ -346,6 +463,7 @@ namespace VanityStudio.Core
 			Design copy = FromBytes(ToBytes());
 			copy.Id = Guid.NewGuid();
 			copy.Name = newName;
+			copy.WorkshopId = "";
 			copy.Touch();
 			return copy;
 		}

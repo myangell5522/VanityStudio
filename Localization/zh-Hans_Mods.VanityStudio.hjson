@@ -1,0 +1,289 @@
+UI: {
+	ButtonTip: Vanity Studio 时装工坊
+	SwitchToAchievements: 在此处显示成就提示
+	SwitchToStudio: 在此处显示 Vanity Studio 按钮
+	SlotHead: 头部
+	SlotBody: 身体
+	SlotLegs: 腿部
+	SlotFront: 前饰
+	SlotBack: 背饰
+	TipSlotHead: 帽子、头盔、发饰
+	TipSlotBody: 上衣、盔甲、长袍。袖子会跟随你画的姿势
+	TipSlotLegs: 裤子、护腿、鞋子
+	TipSlotFront: 围巾、腰带等穿在前面的东西
+	TipSlotBack: 披风、翅膀、背包。画布更大，可以伸出身体之外
+	KindWearable: 服饰
+	KindItem: 物品
+	KindNPC: NPC
+	KindNPCBoss: NPC / Boss
+	KindBoss: Boss
+	KindProjectile: 射弹
+	NewName: 新的{0}
+	NamePlaceholder: 作品名称
+	HideVanilla: 隐藏原版
+	TipHideVanilla:
+		'''
+		穿戴此作品时隐藏该栏位的原版贴图。
+		盔甲属性完全不变，只改变外观
+		'''
+	TipRetextureChip:
+		'''
+		替换 {0}
+		单帧 {1}x{2}，贴图共 {3} 帧
+		'''
+	TipClose: 关闭（Esc）。所有内容都会自动保存
+	TipHelp: 怎么用？（重新播放引导）
+	TipEquip: 穿上这件作品
+	TipUnequip: 脱下这件作品
+	TipApply: 在游戏中使用此贴图（仅自己可见，类似材质包）
+	TipUnapply: 恢复原版贴图
+	Applied: "{0} 已在游戏中生效"
+	TipPublish: 分享到工坊
+	TipExport: 按游戏自身格式导出：帧竖向排列，每个动画帧一个文件，并在需要时附带 tModLoader 身体贴图和发光贴图。导出后打开文件夹
+	TipImport: 将 .png 贴图导入为新图层，或打开 .vsd 作品
+	TipFromEquipped: 把你该栏位显示的盔甲或饰品贴图复制到新图层，方便重绘
+	TipRecopy: 再次把当前贴图复制到新图层（包含材质包）
+	TipSave: 立即保存（Ctrl+S）
+	TipLibrary: 我的全部作品
+	TipWorkshop: 工坊：其他玩家的作品
+	TipUndo: 撤销（Ctrl+Z）
+	TipRedo: 重做（Ctrl+Y）
+	Saved: 已保存
+	Equipped: 已穿上：{0}
+	Exported: 已导出：{0}
+	ExportedChat: "[Vanity Studio] 已导出到 {0}"
+	ExportFailed: 导出失败，详情见 client.log
+	ImportTitle: 导入到 Vanity Studio
+	ImportFailed: 无法读取该文件
+	Imported: 已导入：{0}
+	ImportedEquipped: 已将 {0} 复制到新图层
+	NothingEquipped: "{0}栏位没有可复制的外观"
+	NoSprite: 无法获取该贴图
+	SpriteTooBig: 贴图太大（{0}x{1}，最大 512）
+	TooManyLayers: 图层太多了
+	ToolPencil: 铅笔
+	ToolEraser: 橡皮擦
+	ToolFill: 填充
+	ToolPicker: 取色器
+	ToolLine: 直线
+	ToolRect: 矩形（按住 Shift 填充）
+	ToolMove: 移动图层
+	TipBrush: 笔刷大小（[ 和 ]）
+	TipMirror: 水平镜像（M）
+	TipGrid: 像素网格
+	TipReference: 在画布下显示角色（或原版贴图）（{0}%，滚轮调节）
+	HintPencil: 左键：主色，右键：副色，Alt：取色。
+	HintEraser: 按住拖动来擦除。
+	HintFill: 单击填充区域。Shift+单击：替换所有同色像素。
+	HintPicker: 左键/右键：取色到主色/副色。
+	HintLine: 拖动画直线。
+	HintRect: 拖动画矩形。按住 Shift 填充。
+	HintMove: 拖动以平移整幅图。
+	HintNav: 滚轮：缩放 · 中键/空格+拖动：平移 · F：适应 · Tab：下一个姿势
+	PoseBase: 全部姿势
+	TipPoseBase: 画一次即用于所有姿势，走路时的上下起伏会自动添加
+	PoseStand: 站立
+	PoseJump: 跳跃
+	PoseUse: 挥动 {0}
+	PoseWalk: 行走 {0}
+	GroupStand: 站立
+	GroupUse: 挥动
+	GroupJump: 跳跃/飞行
+	GroupWalk: 行走
+	TipGroupStand: 静止站立。通常与“全部姿势”相同
+	TipGroupUse: 挥动或使用物品的 4 帧：手臂会动
+	TipGroupJump: 在空中：跳跃、下落和飞行
+	TipGroupWalk: 行走循环的 14 帧：腿和手臂动作很大
+	TipPoseOverride: 有独立的绘制。右键恢复为基础图
+	TipPoseInherit: 使用基础图。在这里绘制即可为该姿势单独作画
+	PoseOwn: 独立绘制
+	PoseInherits: 沿用基础图，在此绘制只会改变这个姿势
+	TipPoseNext: 下一个姿势（Tab）
+	TipPosePrev: 上一个姿势（Shift+Tab）
+	TipPoseFromPrev: 以「{0}」的画面为起点：完成行走循环最快的方式
+	TipPoseFillGroup: 把当前姿势复制到所有「{0}」姿势
+	TipPoseClearGroup: 把所有「{0}」姿势恢复为基础图
+	PoseFilled: 已复制到整组
+	HintAllPoses: 一张图用于所有姿势。只有当某些姿势需要不同外观时（挥动时的袖子、行走时的腿）才在上方选择分组。
+	HintLegsWalk: 行走时腿的形状会变化：在画好行走帧之前，行走预览会显得僵硬。
+	StartWalk: 绘制行走帧
+	UsingBase: 显示基础图
+	SheetFrames: 贴图序列：{0} 帧
+	SheetFrameN: 第 {0} 帧
+	HintSheet: 游戏贴图中的每一帧，从上到下
+	TipSheetFill: 把当前帧复制到所有帧
+	TipLayerAdd: 新建图层
+	TipLayerDuplicate: 复制图层
+	TipLayerDelete: 删除图层
+	TipLayerUp: 上移图层
+	TipLayerDown: 下移图层
+	TipLayerMerge: 向下合并
+	TipLayerFlip: 水平翻转当前画面。Shift：整个图层
+	TipLayerOutline: 用主色给图案加 1 像素描边。Shift：整个图层
+	TipEffects: 特效：发光、染料着色器、粒子
+	LayerName: 图层 {0}
+	Layers: 图层
+	Opacity: 不透明度
+	TipVisible: 显示/隐藏图层
+	TipRename: 双击重命名
+	TipFrameAdd: 新建空白帧
+	TipFrameDuplicate: 复制帧
+	TipFrameDelete: 删除帧
+	TipFrameLeft: 帧左移
+	TipFrameRight: 帧右移
+	TipPlay: 播放/暂停（Enter）
+	TipOnion: 洋葱皮（O）
+	TipDuration: 帧时长。滚轮或点击，Shift 加大步长
+	All: 全部
+	TipDurationAll: 所有帧使用此时长
+	FrameN: 第 {0} 帧
+	FramesN: "{0} 帧"
+	TipCelClear: 右键清除（仅当前姿势）
+	EffectsTitle: 特效：{0}
+	FxGlow: 发光
+	FxPulse: 脉动
+	TipFxGlow: 这些像素不受光照影响，像发光贴图一样：在黑暗洞穴里也很亮
+	TipFxPulse: 缓慢呼吸般明暗变化的发光
+	FxGlowHint: 打开预览里的月亮来查看效果
+	FxDye: 染料着色器
+	FxNoDye: 无（使用你染料栏中的染料）
+	FxRemove: 移除
+	FxDyeHint: 任何染料都可以，包括模组染料。滚动查看更多
+	FxDyeHintSprite: 在世界中显示；物品栏图标不显示着色器
+	FxParticles: 粒子（从该图层的像素发出）
+	FxNone: 无
+	FxRate: 数量
+	DustGold: 金焰
+	DustFire: 火焰
+	DustFrost: 冰霜
+	DustCursed: 诅咒
+	DustArcane: 奥术
+	DustShadow: 暗影焰
+	DustSparkle: 闪光
+	DustRainbow: 彩虹
+	DustGem: 宝石
+	DustElectric: 电光
+	DustSmoke: 烟雾
+	DustBlood: 血液
+	DustWater: 水
+	DustMushroom: 蘑菇
+	DustConfetti: 彩纸
+	DustShimmer: 微光
+	PvAuto: 自动：轮流播放所有动作
+	PvIdle: 站立
+	PvWalk: 行走
+	PvJump: 跳跃
+	PvFly: 飞行
+	PvUse: 挥动
+	PvPose: 当前姿势
+	TipPvPose: 显示你正在绘制的姿势（选择姿势时自动开启）
+	TipTurn: 转身
+	TipNight: 夜晚：整体变暗，让发光像素更明显
+	TipPreview: 实时预览（x{0}）。滚轮缩放
+	TipSwapColors: 交换颜色（X）
+	Clear: 透明
+	TipTransparent: 透明：用它涂画即擦除
+	RightClickHint: 右键使用副色绘制
+	CharacterColors: 你的角色
+	Recent: 最近使用
+	TabMine: 我的作品（{0}）
+	TabWorkshop: 创意工坊
+	LibraryEmpty: 这里还什么都没有
+	OpenFolder: 打开文件夹
+	ImportFile: 导入...
+	NewWear: 新服饰：
+	NewRetexture: 重绘：
+	TipNewFor: 新建{0}作品
+	TipNewRetexture: 从游戏中挑选一个对象并重绘它的贴图
+	Show: 显示：
+	FilterAll: 全部
+	TipOpen: 在编辑器中打开
+	TipDuplicate: 复制
+	TipDelete: 删除
+	TipDeleteConfirm: 再次点击以永久删除
+	PickTitle: 你想重绘什么？
+	PickSearch: 按名称搜索
+	PickHeld: 手中：{0}
+	PickCount: 找到 {0} 个
+	PickHint: 贴图按游戏当前显示复制，包含材质包
+	WsOpenSite: 在 GitHub 打开
+	WsRefresh: 刷新
+	WsLoading: 正在加载工坊...
+	WsEmpty: 工坊里还是空的，来发布第一件作品吧！
+	WsError: 无法连接工坊（{0}）
+	WsNothing: 没有匹配的结果
+	WsOriginal: 原创 · {0}
+	WsRework: 重绘自 {0}
+	WsDownload: 添加到我的作品
+	WsOpenOwned: 已在我的作品中：打开
+	WsDownloaded: 已将 {0} 添加到我的作品
+	WsDownloadFailed: 下载失败
+	PubTitle: 分享到工坊
+	PubName: 名称
+	PubDescription: 简短介绍（可选）
+	PubDescriptionHint: 这是什么、灵感来自哪里...
+	PubAs: 发布者：{0}
+	PubSend: 发布
+	PubSending: 发送中...
+	PubNote: 卡片上会显示你的 Steam 昵称和头像。新作品审核后才会出现。
+	PubNoRelay: 工坊暂未开放发布，但已经可以浏览。
+	PubDone: 已发送！{0}
+	PubFailed: 发送失败：{0}
+	TutDontShow: 不再显示
+	TutNext: 下一步
+	TutBack: 上一步
+	TutSkip: 跳过
+	TutFinish: 开始吧！
+	TutWelcomeTitle: 欢迎来到 Vanity Studio！
+	TutWelcome:
+		'''
+		在这里你可以画自己的帽子、衣服、裤子、披风和翅膀，重绘已有的盔甲，或者给任何物品、NPC、Boss、射弹换上新外观。
+		这个简短的导览会告诉你各个功能在哪里，不到一分钟，之后也可以用 ? 按钮重新打开。
+		'''
+	TutSetupTitle: 名称、栏位和外观
+	TutSetup:
+		'''
+		给作品起名，并通过图标选择穿戴位置：头部、身体、腿部、前饰（围巾、腰带）或背饰（披风、翅膀）。
+		「隐藏原版」会隐藏你在该栏位穿着的东西，让你的作品取而代之。属性不会改变。
+		'''
+	TutToolsTitle: 工具
+	TutTools:
+		'''
+		铅笔、橡皮擦、填充、取色器、直线、矩形和移动。下方是笔刷大小、镜像绘制、像素网格，以及显示在画布下的角色。
+		每个工具都有快捷键，把鼠标移到按钮上即可看到。
+		'''
+	TutCanvasTitle: 画布
+	TutCanvas:
+		'''
+		这里的画框和游戏完全一致，所以你画的位置就是它在角色身上的位置。下面半透明的角色帮你对齐。
+		左键用主色绘制，右键用副色。滚轮缩放，按住鼠标中键拖动画布。
+		'''
+	TutPosesTitle: 姿势
+	TutPoses:
+		'''
+		大多数时候只需在「全部姿势」里画：它会用于所有姿势，走路的起伏也会自动添加。
+		当某处需要不同外观时，选择分组：挥动对应手臂，行走对应腿。用箭头或 Tab 逐帧切换，一键以上一个姿势为起点，预览也会同步显示。金色小点表示该姿势有独立绘制。
+		'''
+	TutTimelineTitle: 图层、特效和帧
+	TutTimeline:
+		'''
+		左侧是图层：可以添加、排序、合并、隐藏和调整不透明度。图层上的魔杖会打开特效：发光像素、脉动、任意染料着色器和粒子。
+		右侧是时间轴：添加帧让作品动起来，并设置每帧的时长。
+		'''
+	TutPreviewTitle: 实时预览
+	TutPreview: 实时显示你的角色穿上作品的样子。「自动」轮流播放所有动作，也可以单独选择。月亮切换到夜晚，方便查看发光效果。滚轮缩放。
+	TutColorsTitle: 颜色
+	TutColors: 大方块是主色，后面的是副色，点击可以交换。可用滑块、输入十六进制颜色，或从调色板、角色自身颜色和最近使用的颜色中选择。
+	TutActionsTitle: 保存、分享、导入
+	TutActions:
+		'''
+		撤销/重做、我的作品、汇集大家作品的工坊、保存、把身上的装备复制到图层、导入、按游戏格式导出，以及发布到工坊。
+		不必手动保存：所有内容都会自动保存，任何角色、世界和服务器都能使用。
+		'''
+	TutWearTitle: 穿上它
+	TutWear:
+		'''
+		点击即可穿上作品（如果是物品或 NPC，则让游戏使用你的贴图）。它会在下次进入游戏时保留，同服务器的玩家也能看到你的服饰，即使你还在绘制中。
+		玩得开心！
+		'''
+}

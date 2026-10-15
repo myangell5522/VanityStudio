@@ -30,7 +30,10 @@ namespace VanityStudio.UI
 			Main.QueueMainThreadAction(() => {
 				CanvasView.Unload();
 				LibraryView.Unload();
+				WorkshopClient.Unload();
 			});
+			TargetPicker.Unload();
+			Targets.Unload();
 			DesignLibrary.Unload();
 			OutfitNet.Clear();
 		}
@@ -61,6 +64,7 @@ namespace VanityStudio.UI
 		}
 
 		public override void UpdateUI(GameTime gameTime) {
+			WorkshopClient.Pump();
 			if (StudioState.ReopenInventory && !StudioState.IsOpen) {
 				StudioState.ReopenInventory = false;
 				Main.playerInventory = true;
