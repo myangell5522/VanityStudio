@@ -1,5 +1,5 @@
 displayName = Vanity Studio
 author = myangell
-version = 0.3
+version = 0.3.1
 side = Both
 buildIgnore = WorkShopAnimationPublish*

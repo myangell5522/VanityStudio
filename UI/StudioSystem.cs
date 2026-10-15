@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -78,14 +79,25 @@ namespace VanityStudio.UI
 			StudioState.Update();
 		}
 
+		// Other mods' cursor layers stay on too: plenty of mods (custom cursors, QoL packs) hide the vanilla
+		// pointer and draw their own, and switching theirs off left people with no mouse at all inside the studio.
+		private static bool Keep(string name) {
+			if (keepLayers.Contains(name))
+				return true;
+			if (name.StartsWith("Vanilla: "))
+				return false;
+			return name.Contains("cursor", StringComparison.OrdinalIgnoreCase) || name.Contains("mouse", StringComparison.OrdinalIgnoreCase);
+		}
+
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
 			if (!StudioState.IsOpen)
 				return;
 			foreach (GameInterfaceLayer layer in layers) {
-				if (!keepLayers.Contains(layer.Name))
+				if (!Keep(layer.Name))
 					layer.Active = false;
 			}
-			int at = layers.FindIndex(l => l.Name == "Vanilla: Mouse Text");
+			// under the tooltips and under every cursor, wherever other mods have moved those
+			int at = layers.FindIndex(l => l.Name == "Vanilla: Mouse Text" || l.Name == "Vanilla: Cursor" || (!l.Name.StartsWith("Vanilla: ") && Keep(l.Name)));
 			if (at < 0)
 				at = layers.Count;
 			layers.Insert(at, new LegacyGameInterfaceLayer("VanityStudio: Studio", () => {

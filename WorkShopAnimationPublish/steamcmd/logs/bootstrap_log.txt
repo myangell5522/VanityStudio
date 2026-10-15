@@ -188,3 +188,66 @@
 [2026-10-14 20:12:39] Verifying all executable checksums
 [2026-10-14 20:12:39] Verification complete
 [2026-10-14 20:12:44] Shutdown
+
+
+[2026-10-16 00:02:00] Startup - updater built Oct 13 2026 11:45:33
+[2026-10-16 00:02:00] Startup - Steam Client launched with: "C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamcmd.exe"  <+164 truncated>
+[2026-10-16 00:02:00] Windows 10.0.26200.0, 0, 2, 256, 1, 48 
+[2026-10-16 00:02:00] Using the following download hosts for Public, Realm steamglobal
+[2026-10-16 00:02:00] 1. https://client-update.fastly.steamstatic.com, /, Realm 'steamglobal', weight was 900, source = 'update_hosts_cached.vdf'
+[2026-10-16 00:02:00] 2. https://client-update.akamai.steamstatic.com, /, Realm 'steamglobal', weight was 400, source = 'update_hosts_cached.vdf'
+[2026-10-16 00:02:00] 3. https://client-update.steamstatic.com, /, Realm 'steamglobal', weight was 1, source = 'baked in'
+[2026-10-16 00:02:00] Checking for update on startup
+[2026-10-16 00:02:00] Проверка на наличие обновлений...
+[2026-10-16 00:02:00] Downloading manifest: https://client-update.fastly.steamstatic.com/steam_cmd_win64
+[2026-10-16 00:02:00] Manifest download: send request
+[2026-10-16 00:02:00] Manifest download: waiting for download to finish
+[2026-10-16 00:02:01] Manifest download: finished
+[2026-10-16 00:02:01] Download skipped: /steam_cmd_win64 version 1791918946, installed version 1791918946, existing pending version 0
+[2026-10-16 00:02:01] Nothing to do
+[2026-10-16 00:02:01] Проверка установки...
+[2026-10-16 00:02:01] Verifying all executable checksums
+[2026-10-16 00:02:01] Verification complete
+[2026-10-16 00:02:06] Shutdown
+
+
+[2026-10-16 00:04:22] Startup - updater built Oct 13 2026 11:45:33
+[2026-10-16 00:04:22] Startup - Steam Client launched with: "C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamcmd.exe"  <+164 truncated>
+[2026-10-16 00:04:22] Windows 10.0.26200.0, 0, 2, 256, 1, 48 
+[2026-10-16 00:04:22] Using the following download hosts for Public, Realm steamglobal
+[2026-10-16 00:04:22] 1. https://client-update.fastly.steamstatic.com, /, Realm 'steamglobal', weight was 900, source = 'update_hosts_cached.vdf'
+[2026-10-16 00:04:22] 2. https://client-update.akamai.steamstatic.com, /, Realm 'steamglobal', weight was 400, source = 'update_hosts_cached.vdf'
+[2026-10-16 00:04:22] 3. https://client-update.steamstatic.com, /, Realm 'steamglobal', weight was 1, source = 'baked in'
+[2026-10-16 00:04:22] Checking for update on startup
+[2026-10-16 00:04:22] Проверка на наличие обновлений...
+[2026-10-16 00:04:22] Downloading manifest: https://client-update.fastly.steamstatic.com/steam_cmd_win64
+[2026-10-16 00:04:22] Manifest download: send request
+[2026-10-16 00:04:22] Manifest download: waiting for download to finish
+[2026-10-16 00:04:22] Manifest download: finished
+[2026-10-16 00:04:22] Download skipped: /steam_cmd_win64 version 1791918946, installed version 1791918946, existing pending version 0
+[2026-10-16 00:04:22] Nothing to do
+[2026-10-16 00:04:22] Проверка установки...
+[2026-10-16 00:04:22] Verifying all executable checksums
+[2026-10-16 00:04:22] Verification complete
+[2026-10-16 00:04:25] Shutdown
+
+
+[2026-10-16 00:04:25] Startup - updater built Oct 13 2026 11:45:33
+[2026-10-16 00:04:25] Startup - Steam Client launched with: "C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamcmd.exe"  <+164 truncated>
+[2026-10-16 00:04:25] Windows 10.0.26200.0, 0, 2, 256, 1, 48 
+[2026-10-16 00:04:25] Using the following download hosts for Public, Realm steamglobal
+[2026-10-16 00:04:25] 1. https://client-update.akamai.steamstatic.com, /, Realm 'steamglobal', weight was 400, source = 'update_hosts_cached.vdf'
+[2026-10-16 00:04:25] 2. https://client-update.fastly.steamstatic.com, /, Realm 'steamglobal', weight was 900, source = 'update_hosts_cached.vdf'
+[2026-10-16 00:04:25] 3. https://client-update.steamstatic.com, /, Realm 'steamglobal', weight was 1, source = 'baked in'
+[2026-10-16 00:04:25] Checking for update on startup
+[2026-10-16 00:04:25] Проверка на наличие обновлений...
+[2026-10-16 00:04:25] Downloading manifest: https://client-update.akamai.steamstatic.com/steam_cmd_win64
+[2026-10-16 00:04:25] Manifest download: send request
+[2026-10-16 00:04:25] Manifest download: waiting for download to finish
+[2026-10-16 00:04:26] Manifest download: finished
+[2026-10-16 00:04:26] Download skipped: /steam_cmd_win64 version 1791918946, installed version 1791918946, existing pending version 0
+[2026-10-16 00:04:26] Nothing to do
+[2026-10-16 00:04:26] Проверка установки...
+[2026-10-16 00:04:26] Verifying all executable checksums
+[2026-10-16 00:04:26] Verification complete
+[2026-10-16 00:05:03] Shutdown

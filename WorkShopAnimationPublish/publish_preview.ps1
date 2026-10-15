@@ -8,12 +8,14 @@
 #   -PublishedFileId <id>   Workshop item id (the number in the item's URL); found automatically if possible
 #   -SteamCmd <path>        steamcmd.exe to use; downloaded next to this script if missing
 #   -Gif <path>             a different GIF/PNG/JPG to upload
+#   -ResetLogin             forget the saved Steam login first (after a password change, or to switch accounts)
 
 param(
 	[string]$SteamUser,
 	[string]$PublishedFileId,
 	[string]$SteamCmd,
-	[string]$Gif
+	[string]$Gif,
+	[switch]$ResetLogin
 )
 
 $ErrorActionPreference = "Stop"
@@ -93,6 +95,25 @@ function Get-SteamCmd($path) {
 	return $local
 }
 
+# SteamCMD remembers the login as a token in config\config.vdf ("ConnectCache"). Changing the Steam password
+# revokes that token, and SteamCMD then just says "Access Denied" instead of asking for the new password.
+# Dropping the cached token makes it ask again; nothing else in the file is touched.
+function Clear-CachedLogin($exe) {
+	$config = Join-Path (Split-Path -Parent $exe) "config\config.vdf"
+	if (-not (Test-Path $config)) { return $false }
+	$text = Get-Content $config -Raw
+	$clean = [regex]::Replace($text, '\s*"ConnectCache"\s*\{[^{}]*\}', "")
+	if ($clean -eq $text) { return $false }
+	Set-Content $config $clean -Encoding UTF8 -NoNewline
+	return $true
+}
+
+function Get-ConsoleLog($exe) {
+	$log = Join-Path (Split-Path -Parent $exe) "logs\console_log.txt"
+	if (Test-Path $log) { return Get-Content $log -Raw }
+	return ""
+}
+
 # --- gather everything -----------------------------------------------------------------
 
 $settings = Read-Settings
@@ -147,8 +168,28 @@ Write-Host "Uploading $(Split-Path $Gif -Leaf) as the cover of item $PublishedFi
 Write-Host "SteamCMD will ask for the password and, if you use Steam Guard, the code." -ForegroundColor Cyan
 Write-Host ""
 
+if ($ResetLogin -and (Clear-CachedLogin $exe)) {
+	Write-Host "Forgot the saved Steam login, SteamCMD will ask for the password." -ForegroundColor Yellow
+}
+
+$before = (Get-ConsoleLog $exe).Length
 & $exe +login $SteamUser +workshop_build_item "$vdf" +quit
 $code = $LASTEXITCODE
+
+if ($code -ne 0) {
+	$log = Get-ConsoleLog $exe
+	$latest = if ($log.Length -ge $before) { $log.Substring($before) } else { $log }
+	# a saved login that Steam no longer accepts: forget it and try once more with the password
+	if ($latest -match "cached credentials" -and $latest -match "Access Denied|Expired|Invalid Password|Revoked") {
+		if (Clear-CachedLogin $exe) {
+			Write-Host ""
+			Write-Host "Steam refused the saved login (the password was probably changed). Logging in again..." -ForegroundColor Yellow
+			Write-Host ""
+			& $exe +login $SteamUser +workshop_build_item "$vdf" +quit
+			$code = $LASTEXITCODE
+		}
+	}
+}
 
 Write-Host ""
 if ($code -eq 0) {
@@ -156,6 +197,6 @@ if ($code -eq 0) {
 	Write-Host "  https://steamcommunity.com/sharedfiles/filedetails/?id=$PublishedFileId"
 	Write-Host "Publishing from tModLoader again puts icon.png back, so run this again after each publish."
 } else {
-	Write-Host "SteamCMD exited with code $code. Scroll up for its message (wrong password, Steam Guard, not the item's owner...)." -ForegroundColor Red
+	Write-Host "SteamCMD exited with code $code. Scroll up for its message (wrong password, Steam Guard, not the item's owner...).`n  If the login keeps failing, run it with -ResetLogin." -ForegroundColor Red
 }
 exit $code

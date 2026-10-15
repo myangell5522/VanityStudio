@@ -77,3 +77,42 @@
 [2026-10-14 20:12:43] RequestAppInfoUpdate: AppIDs 228980,1281930
 [2026-10-14 20:12:43] Requesting 2 apps, 0 packages (meta data, 1024 prev attempts, expected 0 KB)
 [2026-10-14 20:12:43] UpdatesJob: finished OK, apps updated 0 (0 KB), packages updated 0 (0 KB)
+
+
+[2026-10-16 00:02:01] Client version: 1791918946
+[2026-10-16 00:02:01] ThreadedReadFromDisk: loading appinfo cache from: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf
+[2026-10-16 00:02:01] ThreadedReadFromDisk: header version: 0x7564429
+[2026-10-16 00:02:01] ThreadedReadFromDisk: apps updated: 1694
+[2026-10-16 00:02:01] CAppInfoCacheReadFromDiskThread took 50 milliseconds to initialize
+
+
+[2026-10-16 00:04:22] Client version: 1791918946
+[2026-10-16 00:04:22] ThreadedReadFromDisk: loading appinfo cache from: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf
+[2026-10-16 00:04:22] ThreadedReadFromDisk: header version: 0x7564429
+[2026-10-16 00:04:22] ThreadedReadFromDisk: apps updated: 1694
+[2026-10-16 00:04:22] CAppInfoCacheReadFromDiskThread took 56 milliseconds to initialize
+
+
+[2026-10-16 00:04:26] Client version: 1791918946
+[2026-10-16 00:04:26] ThreadedReadFromDisk: loading appinfo cache from: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf
+[2026-10-16 00:04:26] ThreadedReadFromDisk: header version: 0x7564429
+[2026-10-16 00:04:26] ThreadedReadFromDisk: apps updated: 1694
+[2026-10-16 00:04:26] CAppInfoCacheReadFromDiskThread took 47 milliseconds to initialize
+[2026-10-16 00:04:57] RequestAppInfoUpdate: AppIDs 7
+[2026-10-16 00:04:57] Packages changed: force all
+[2026-10-16 00:04:57] Apps changed: force all
+[2026-10-16 00:04:57] Change number 39828410->39877751, apps: 0/0, packages: 0/0
+[2026-10-16 00:04:57] Requesting 1694 apps, 1008 packages (meta data, 1024 prev attempts, expected 126 KB)
+[2026-10-16 00:04:58] Requested 16 app access tokens, 1 received, 15 denied
+[2026-10-16 00:04:59] Updated SHAs with 1 new access tokens
+[2026-10-16 00:05:00] Downloaded 67 apps via HTTP, 1629 KB (302 KB compressed)
+[2026-10-16 00:05:00] Requesting 66 apps, 1 packages (full data, 1024 prev attempts, expected 362 KB)
+[2026-10-16 00:05:00] UpdatesJob: finished OK, apps updated 133 (1988 KB), packages updated 1 (0 KB)
+[2026-10-16 00:05:00] Requesting 1 apps, 0 packages (meta data, 1024 prev attempts, expected 0 KB)
+[2026-10-16 00:05:01] Downloaded 1 apps via HTTP, 8 KB (2 KB compressed)
+[2026-10-16 00:05:01] UpdatesJob: finished OK, apps updated 1 (8 KB), packages updated 0 (0 KB)
+[2026-10-16 00:05:01] RequestAppInfoUpdate: AppIDs 228980,1281930
+[2026-10-16 00:05:01] Requesting 2 apps, 0 packages (meta data, 1024 prev attempts, expected 0 KB)
+[2026-10-16 00:05:02] UpdatesJob: finished OK, apps updated 0 (0 KB), packages updated 0 (0 KB)
+[2026-10-16 00:05:03] ThreadedWriteToDisk: writing appinfo cache to: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf
+[2026-10-16 00:05:03] App cache write succeeded C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf (1695 apps, 4886 KB) in 52 ms
