@@ -57,16 +57,16 @@ namespace VanityStudio.UI
 			var right = new Rectangle(win.Right - 10 - RightColumn, bodyTop, RightColumn, win.Bottom - 10 - bodyTop);
 			var left = new Rectangle(win.X + 10, bodyTop, right.X - 8 - (win.X + 10), right.Height);
 
-			HeaderBar.Draw(header, d);
+			Gui.Safe("Header", () => HeaderBar.Draw(header, d));
 			if (StudioState.Doc != d)
 				return;
 			var R = Tutorial.Regions;
 
 			if (StudioState.LibraryOpen) {
 				if (StudioState.WorkshopTab)
-					WorkshopView.Draw(left);
+					Gui.Safe("Workshop", () => WorkshopView.Draw(left));
 				else
-					LibraryView.Draw(left);
+					Gui.Safe("Library", () => LibraryView.Draw(left));
 			}
 			else {
 				var timeline = new Rectangle(left.X, left.Bottom - TimelineHeight, left.Width, TimelineHeight);
@@ -78,44 +78,57 @@ namespace VanityStudio.UI
 				R["poses"] = poses;
 				R["canvas"] = canvas;
 				R["timeline"] = timeline;
-				DrawToolbar(tools);
-				PoseBar.Draw(poses, d);
-				DrawTimeline(timeline, d);
+				Gui.Safe("Tools", () => DrawToolbar(tools));
+				Gui.Safe("Poses", () => PoseBar.Draw(poses, d));
+				Gui.Safe("Timeline", () => DrawTimeline(timeline, d));
 				// canvas last so the panels above get first pick of the mouse
-				CanvasView.Draw(canvas);
+				Gui.Safe("Canvas", () => CanvasView.Draw(canvas));
 				DrawToast(canvas);
 			}
 
 			var preview = new Rectangle(right.X, right.Y, right.Width, PreviewPanel.Height);
 			R["preview"] = preview;
 			R["colors"] = new Rectangle(right.X, preview.Bottom + 8, right.Width, right.Bottom - preview.Bottom - 8);
-			PreviewPanel.Draw(preview, d);
-			int y = ColorPanel.Draw(new Rectangle(right.X, preview.Bottom + 8, right.Width, 196));
-			ColorPanel.DrawPalettes(new Rectangle(right.X, y + 4, right.Width, right.Bottom - y - 4));
+			Gui.Safe("Preview", () => PreviewPanel.Draw(preview, d));
+			var colors = new Rectangle(right.X, preview.Bottom + 8, right.Width, 196);
+			Gui.Safe("Colors", () => ColorPanel.Draw(colors));
+			Gui.Safe("Palettes", () => ColorPanel.DrawPalettes(new Rectangle(right.X, colors.Bottom + 4, right.Width, right.Bottom - colors.Bottom - 4)));
 
 			if (StudioState.LibraryOpen)
 				DrawToast(left);
-			Gui.FlushOverlays();
+			Gui.Safe("Overlays", Gui.FlushOverlays);
 
 			if (!Tutorial.Active && StudioState.Popup == Popup.None)
 				Shortcuts(d);
 
 			if (StudioState.Popup != Popup.None && !Tutorial.Active) {
 				Gui.Locked = false;
-				switch (StudioState.Popup) {
-					case Popup.Effects:
-						EffectsPopup.Draw(d);
-						break;
-					case Popup.Target:
-						TargetPicker.Draw();
-						break;
-					case Popup.Publish:
-						PublishDialog.Draw();
-						break;
-				}
+				bool ok = StudioState.Popup switch {
+					Popup.Effects => Gui.Safe("Effects", () => EffectsPopup.Draw(d)),
+					Popup.Target => Gui.Safe("Target picker", TargetPicker.Draw),
+					Popup.Publish => Gui.Safe("Publish", PublishDialog.Draw),
+					_ => true
+				};
+				// a popup that can't draw would otherwise lock the studio behind it
+				if (!ok)
+					StudioState.Popup = Popup.None;
 			}
-			Tutorial.Draw();
+			if (!Gui.Safe("Tutorial", Tutorial.Draw))
+				Tutorial.End();
+			DrawError(win);
 			Gui.EndFrame();
+		}
+
+		// a quiet red line at the bottom of the window instead of a silent, half-drawn studio
+		private static void DrawError(Rectangle win) {
+			if (Gui.LastErrorTime <= 0 || Gui.LastError == null)
+				return;
+			Gui.LastErrorTime--;
+			string text = L.Get("DrawError", Gui.LastError);
+			Vector2 size = Gui.Measure(text, 0.7f);
+			var back = new Rectangle(win.X + 10, win.Bottom - 4 - (int)size.Y, (int)size.X + 16, (int)size.Y + 2);
+			Gui.Rect(back, Color.Black * 0.8f);
+			Gui.Text(text, new Vector2(back.X + 8, back.Center.Y + 2), new Color(255, 120, 110), 0.7f, 0f, 0.5f);
 		}
 
 		#region toolbar

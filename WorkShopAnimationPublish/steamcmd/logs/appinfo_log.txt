@@ -116,3 +116,23 @@
 [2026-10-16 00:05:02] UpdatesJob: finished OK, apps updated 0 (0 KB), packages updated 0 (0 KB)
 [2026-10-16 00:05:03] ThreadedWriteToDisk: writing appinfo cache to: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf
 [2026-10-16 00:05:03] App cache write succeeded C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf (1695 apps, 4886 KB) in 52 ms
+
+
+[2026-10-16 18:00:27] Client version: 1791918946
+[2026-10-16 18:00:27] ThreadedReadFromDisk: loading appinfo cache from: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf
+[2026-10-16 18:00:27] ThreadedReadFromDisk: header version: 0x7564429
+[2026-10-16 18:00:27] ThreadedReadFromDisk: apps updated: 1695
+[2026-10-16 18:00:27] CAppInfoCacheReadFromDiskThread took 68 milliseconds to initialize
+[2026-10-16 18:00:31] RequestAppInfoUpdate: AppIDs 7
+[2026-10-16 18:00:32] Apps changed: force all
+[2026-10-16 18:00:32] Change number 39877751->39907771, apps: 0/0, packages: 0/2693
+[2026-10-16 18:00:32] Requesting 1695 apps, 0 packages (meta data, 1024 prev attempts, expected 79 KB)
+[2026-10-16 18:00:32] Requested 15 app access tokens, 0 received, 15 denied
+[2026-10-16 18:00:33] Downloaded 48 apps via HTTP, 1179 KB (193 KB compressed)
+[2026-10-16 18:00:33] Requesting 43 apps, 0 packages (full data, 1024 prev attempts, expected 204 KB)
+[2026-10-16 18:00:33] UpdatesJob: finished OK, apps updated 91 (1381 KB), packages updated 0 (0 KB)
+[2026-10-16 18:00:34] RequestAppInfoUpdate: AppIDs 228980,1281930
+[2026-10-16 18:00:34] Requesting 2 apps, 0 packages (meta data, 1024 prev attempts, expected 0 KB)
+[2026-10-16 18:00:34] UpdatesJob: finished OK, apps updated 0 (0 KB), packages updated 0 (0 KB)
+[2026-10-16 18:00:35] ThreadedWriteToDisk: writing appinfo cache to: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf
+[2026-10-16 18:00:35] App cache write succeeded C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd/appcache/appinfo.vdf (1695 apps, 4887 KB) in 53 ms

@@ -226,6 +226,51 @@ namespace VanityStudio.UI
 			Sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
 		}
 
+		#region failures
+
+		// Vanilla runs interface layers one after another and stops at the first one that throws, which also
+		// takes the cursor with it (it's drawn by a later layer). So every part of the studio draws through
+		// Safe(): a broken part is skipped and logged once, and the rest of the UI keeps working.
+
+		public static string LastError;
+		public static int LastErrorTime;
+		private static readonly System.Collections.Generic.HashSet<string> reported = new();
+
+		public static bool Safe(string part, Action draw) {
+			try {
+				draw();
+				return true;
+			}
+			catch (Exception e) {
+				Fail(part, e);
+				return false;
+			}
+		}
+
+		public static void Fail(string part, Exception e) {
+			if (reported.Add(part + "|" + e.GetType().FullName + "|" + e.TargetSite?.Name))
+				VanityStudio.Instance.Logger.Error($"Studio: '{part}' failed to draw", e);
+			LastError = part;
+			LastErrorTime = 600;
+			Recover();
+		}
+
+		/// <summary>Back to a plain UI batch, whatever state the failed code left it in.</summary>
+		public static void Recover() {
+			clipping = false;
+			try {
+				Sb.End();
+			}
+			catch (InvalidOperationException) {
+				// it wasn't running
+			}
+			GraphicsDevice dev = Main.instance.GraphicsDevice;
+			dev.ScissorRectangle = new Rectangle(0, 0, dev.PresentationParameters.BackBufferWidth, dev.PresentationParameters.BackBufferHeight);
+			Sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+		}
+
+		#endregion
+
 		/// <summary>
 		/// Draws a player so the bottom-centre of its hitbox lands on <paramref name="feet"/> (UI space), scaled around that point,
 		/// which is exactly how vanilla's renderer scales. With an integer scale the 40x56 frame lands on whole pixels.

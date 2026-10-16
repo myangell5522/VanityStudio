@@ -180,6 +180,7 @@ UI: {
 	TipTurn: Turn around
 	TipNight: Night: dims everything so glowing pixels stand out
 	TipPreview: Live preview (x{0}). Scroll to zoom
+	DrawError: Part of the studio failed to draw ({0}). Details are in client.log
 	TipSwapColors: Swap colors (X)
 	Clear: Clear
 	TipTransparent: Transparent: paint with it to erase

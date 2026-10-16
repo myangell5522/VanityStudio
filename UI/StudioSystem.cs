@@ -101,8 +101,15 @@ namespace VanityStudio.UI
 			if (at < 0)
 				at = layers.Count;
 			layers.Insert(at, new LegacyGameInterfaceLayer("VanityStudio: Studio", () => {
-				if (StudioState.IsOpen)
-					StudioWindow.Draw();
+				// returning false or throwing here would stop vanilla from drawing the layers after ours, cursor included
+				if (StudioState.IsOpen) {
+					try {
+						StudioWindow.Draw();
+					}
+					catch (Exception e) {
+						Gui.Fail("Studio", e);
+					}
+				}
 				return true;
 			}, InterfaceScaleType.UI));
 		}

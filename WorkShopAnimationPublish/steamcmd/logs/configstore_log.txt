@@ -85,3 +85,16 @@
 [2026-10-16 00:05:01] Flushed store 'userlocal' to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\userdata\1256002322\config\localconfig.vdf'
 [2026-10-16 00:05:02] Flushed store 'userlocal' to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\userdata\1256002322\config\localconfig.vdf'
 [2026-10-16 00:05:03] Flushed store 'userlocal' to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\userdata\1256002322\config\localconfig.vdf'
+
+
+[2026-10-16 18:00:27] Client version: 1791918946
+[2026-10-16 18:00:27] Loaded store 'install' from 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\config\config.vdf' successfully
+[2026-10-16 18:00:27] Loaded store 'install' from 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\config\config.vdf' successfully
+[2026-10-16 18:00:27] Loaded store 'install' from 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\config\config.vdf' successfully
+[2026-10-16 18:00:27] Loaded store 'userlocal' from 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\userdata\1256002322\config\localconfig.vdf' successfully
+[2026-10-16 18:00:27] Loaded store 'install' from 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\config\config.vdf' successfully
+[2026-10-16 18:00:31] Flushed store 'install' to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\config\config.vdf'
+[2026-10-16 18:00:32] Flushed store 'userlocal' to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\userdata\1256002322\config\localconfig.vdf'
+[2026-10-16 18:00:33] Flushed store 'userlocal' to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\userdata\1256002322\config\localconfig.vdf'
+[2026-10-16 18:00:34] Flushed store 'userlocal' to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\userdata\1256002322\config\localconfig.vdf'
+[2026-10-16 18:00:35] Flushed store 'userlocal' to 'C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\userdata\1256002322\config\localconfig.vdf'

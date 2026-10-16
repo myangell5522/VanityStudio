@@ -180,6 +180,7 @@ UI: {
 	TipTurn: 转身
 	TipNight: 夜晚：整体变暗，让发光像素更明显
 	TipPreview: 实时预览（x{0}）。滚轮缩放
+	DrawError: 工作室的一部分绘制失败（{0}）。详情见 client.log
 	TipSwapColors: 交换颜色（X）
 	Clear: 透明
 	TipTransparent: 透明：用它涂画即擦除
