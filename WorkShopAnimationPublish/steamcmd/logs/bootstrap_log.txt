@@ -272,3 +272,24 @@
 [2026-10-16 18:00:27] Verifying all executable checksums
 [2026-10-16 18:00:27] Verification complete
 [2026-10-16 18:00:35] Shutdown
+
+
+[2026-10-18 11:15:10] Startup - updater built Oct 13 2026 11:45:33
+[2026-10-18 11:15:10] Startup - Steam Client launched with: "C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamcmd.exe"  <+164 truncated>
+[2026-10-18 11:15:10] Windows 10.0.26200.0, 0, 2, 256, 1, 48 
+[2026-10-18 11:15:10] Using the following download hosts for Public, Realm steamglobal
+[2026-10-18 11:15:10] 1. https://client-update.fastly.steamstatic.com, /, Realm 'steamglobal', weight was 900, source = 'update_hosts_cached.vdf'
+[2026-10-18 11:15:10] 2. https://client-update.akamai.steamstatic.com, /, Realm 'steamglobal', weight was 400, source = 'update_hosts_cached.vdf'
+[2026-10-18 11:15:10] 3. https://client-update.steamstatic.com, /, Realm 'steamglobal', weight was 1, source = 'baked in'
+[2026-10-18 11:15:10] Checking for update on startup
+[2026-10-18 11:15:10] Проверка на наличие обновлений...
+[2026-10-18 11:15:10] Downloading manifest: https://client-update.fastly.steamstatic.com/steam_cmd_win64
+[2026-10-18 11:15:10] Manifest download: send request
+[2026-10-18 11:15:11] Manifest download: waiting for download to finish
+[2026-10-18 11:15:12] Manifest download: finished
+[2026-10-18 11:15:12] Download skipped: /steam_cmd_win64 version 1791918946, installed version 1791918946, existing pending version 0
+[2026-10-18 11:15:12] Nothing to do
+[2026-10-18 11:15:12] Проверка установки...
+[2026-10-18 11:15:12] Verifying all executable checksums
+[2026-10-18 11:15:12] Verification complete
+[2026-10-18 11:15:23] Shutdown

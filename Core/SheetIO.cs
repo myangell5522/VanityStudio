@@ -501,7 +501,7 @@ namespace VanityStudio.Core
 		}
 
 		// mirrors PlayerDrawSet.CreateCompositeData
-		private static Point FrontArmFrame(int pose, out bool shoulderOverArm) {
+		internal static Point FrontArmFrame(int pose, out bool shoulderOverArm) {
 			shoulderOverArm = true;
 			switch (pose) {
 				case 0: return new Point(2, 0);

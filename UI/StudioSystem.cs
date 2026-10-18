@@ -16,7 +16,7 @@ namespace VanityStudio.UI
 		// layers that keep running while the studio covers the screen
 		private static readonly string[] keepLayers = {
 			"Vanilla: Interface Logic 1", "Vanilla: Interface Logic 2", "Vanilla: Interface Logic 3", "Vanilla: Interface Logic 4",
-			"Vanilla: Mouse Text", "Vanilla: Cursor", "Vanilla: Achievement Complete Popups"
+			"Vanilla: Mouse Text", "Vanilla: Achievement Complete Popups"
 		};
 
 		public override void Load() {
@@ -35,6 +35,7 @@ namespace VanityStudio.UI
 			});
 			TargetPicker.Unload();
 			Targets.Unload();
+			Players.CompositeArms.Unload();
 			DesignLibrary.Unload();
 			OutfitNet.Clear();
 		}
@@ -79,29 +80,43 @@ namespace VanityStudio.UI
 			StudioState.Update();
 		}
 
-		// Other mods' cursor layers stay on too: plenty of mods (custom cursors, QoL packs) hide the vanilla
-		// pointer and draw their own, and switching theirs off left people with no mouse at all inside the studio.
+		// Inside the studio the pointer is our own (StudioCursor), so every cursor layer goes quiet: vanilla's, and the ones
+		// custom-cursor mods add. Other mods' mouse-text layers stay, so their tooltips still show.
 		private static bool Keep(string name) {
+			if (name.Contains("cursor", StringComparison.OrdinalIgnoreCase))
+				return false;
 			if (keepLayers.Contains(name))
 				return true;
-			if (name.StartsWith("Vanilla: "))
-				return false;
-			return name.Contains("cursor", StringComparison.OrdinalIgnoreCase) || name.Contains("mouse", StringComparison.OrdinalIgnoreCase);
+			return !name.StartsWith("Vanilla: ") && name.Contains("mouse", StringComparison.OrdinalIgnoreCase);
 		}
 
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
 			if (!StudioState.IsOpen)
 				return;
+			int cursorAt = layers.FindIndex(l => l.Name == "Vanilla: Cursor");
 			foreach (GameInterfaceLayer layer in layers) {
 				if (!Keep(layer.Name))
 					layer.Active = false;
 			}
-			// under the tooltips and under every cursor, wherever other mods have moved those
-			int at = layers.FindIndex(l => l.Name == "Vanilla: Mouse Text" || l.Name == "Vanilla: Cursor" || (!l.Name.StartsWith("Vanilla: ") && Keep(l.Name)));
+			// the pointer goes where vanilla's was (above the tooltips), or on top of everything if that layer is gone
+			layers.Insert(cursorAt < 0 ? layers.Count : cursorAt + 1, new LegacyGameInterfaceLayer("VanityStudio: Cursor", () => {
+				if (StudioState.IsOpen) {
+					try {
+						StudioCursor.Draw();
+					}
+					catch (Exception e) {
+						Gui.Fail("Cursor", e);
+					}
+				}
+				return true;
+			}, InterfaceScaleType.UI));
+
+			// under the tooltips and the pointer, wherever other mods have moved those
+			int at = layers.FindIndex(l => l.Name == "Vanilla: Mouse Text" || l.Name == "VanityStudio: Cursor" || (!l.Name.StartsWith("Vanilla: ") && l.Active && Keep(l.Name)));
 			if (at < 0)
 				at = layers.Count;
 			layers.Insert(at, new LegacyGameInterfaceLayer("VanityStudio: Studio", () => {
-				// returning false or throwing here would stop vanilla from drawing the layers after ours, cursor included
+				// returning false or throwing here would stop vanilla from drawing the layers after ours
 				if (StudioState.IsOpen) {
 					try {
 						StudioWindow.Draw();

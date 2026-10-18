@@ -489,28 +489,28 @@
 				{
 					"431730"
 					{
-						"LastPlayed"		"1791917133"
-						"Playtime2wks"		"1588"
-						"Playtime"		"1593"
+						"LastPlayed"		"1792309817"
+						"Playtime2wks"		"2663"
+						"Playtime"		"2644"
 						"PlaytimeDisconnected"		"69"
 					}
 					"105600"
 					{
-						"LastPlayed"		"1792162166"
-						"Playtime2wks"		"3719"
-						"Playtime"		"42304"
-						"PlaytimeDisconnected"		"1079"
+						"LastPlayed"		"1792309834"
+						"Playtime2wks"		"5391"
+						"Playtime"		"43962"
+						"PlaytimeDisconnected"		"1105"
 					}
 					"1281930"
 					{
-						"LastPlayed"		"1792162166"
-						"Playtime2wks"		"3753"
-						"Playtime"		"53416"
+						"LastPlayed"		"1792309835"
+						"Playtime2wks"		"5425"
+						"Playtime"		"55075"
 						"cloud"
 						{
 							"last_sync_state"		"synchronized"
 						}
-						"PlaytimeDisconnected"		"1079"
+						"PlaytimeDisconnected"		"1105"
 					}
 					"7"
 					{
@@ -537,7 +537,7 @@
 					"480"
 					{
 						"LastPlayed"		"1791863237"
-						"Playtime2wks"		"2015"
+						"Playtime2wks"		"1935"
 						"Playtime"		"37882"
 						"PlaytimeDisconnected"		"1"
 					}
@@ -803,7 +803,7 @@
 					"322330"
 					{
 						"LastPlayed"		"1791864302"
-						"Playtime2wks"		"2"
+						"Playtime2wks"		"1"
 						"Playtime"		"698"
 					}
 					"324810"
@@ -904,9 +904,10 @@
 					}
 					"431960"
 					{
-						"LastPlayed"		"1790144378"
+						"LastPlayed"		"1792232909"
 						"Playtime"		"40614"
 						"PlaytimeDisconnected"		"1"
+						"Playtime2wks"		"1"
 					}
 					"435150"
 					{
@@ -926,7 +927,6 @@
 					"489830"
 					{
 						"LastPlayed"		"1791010987"
-						"Playtime2wks"		"482"
 						"Playtime"		"13193"
 						"PlaytimeDisconnected"		"1"
 					}
@@ -937,9 +937,9 @@
 					}
 					"524220"
 					{
-						"LastPlayed"		"1791887674"
-						"Playtime2wks"		"622"
-						"Playtime"		"2826"
+						"LastPlayed"		"1792178184"
+						"Playtime2wks"		"564"
+						"Playtime"		"2917"
 					}
 					"570940"
 					{
@@ -1011,9 +1011,9 @@
 					}
 					"632360"
 					{
-						"LastPlayed"		"1791863437"
-						"Playtime2wks"		"383"
-						"Playtime"		"672"
+						"LastPlayed"		"1792244361"
+						"Playtime2wks"		"436"
+						"Playtime"		"725"
 					}
 					"635260"
 					{
@@ -1384,10 +1384,10 @@
 					}
 					"1905180"
 					{
-						"LastPlayed"		"1791394324"
-						"Playtime2wks"		"63"
-						"Playtime"		"57906"
-						"PlaytimeDisconnected"		"335"
+						"LastPlayed"		"1792310602"
+						"Playtime2wks"		"1493"
+						"Playtime"		"59324"
+						"PlaytimeDisconnected"		"339"
 					}
 					"1905950"
 					{
@@ -1469,7 +1469,7 @@
 					"2250500"
 					{
 						"LastPlayed"		"1791487663"
-						"Playtime2wks"		"201"
+						"Playtime2wks"		"51"
 						"Playtime"		"355"
 					}
 					"2289970"
@@ -1654,7 +1654,6 @@
 					"920490"
 					{
 						"LastPlayed"		"1791025847"
-						"Playtime2wks"		"100"
 						"Playtime"		"128"
 					}
 					"3052450"
@@ -1665,7 +1664,6 @@
 					"4963920"
 					{
 						"LastPlayed"		"1790970657"
-						"Playtime2wks"		"290"
 						"Playtime"		"8344"
 					}
 					"4421010"
@@ -1726,7 +1724,6 @@
 					"2831340"
 					{
 						"LastPlayed"		"1790976973"
-						"Playtime2wks"		"23"
 						"Playtime"		"23"
 					}
 					"5106770"
@@ -1754,17 +1751,17 @@
 						"Playtime"		"21"
 					}
 				}
-				"LastPlayedTimesSyncTime"		"1792162166"
+				"LastPlayedTimesSyncTime"		"1792310602"
 			}
 		}
 	}
-	"AppInfoChangeNumber"		"39907771"
+	"AppInfoChangeNumber"		"39958072"
 	"Offline"
 	{
-		"Ticket"		"0892a6f4d60415123cd26a"
-		"Signature"		"7f403d3b6ca9180ac1d7a19cfedd92a9dd7608581bedcab51344762f0cc9a4888ba3d7663953911976a8cddb18c787fcda501e198e35e657128d91af148700dff37f5f8ef7d886bc6e6b969bc0fb495bae4c02635c9ceff859d7db3a54b05fa4bf472f5a6a8c9e328724825943704b0154e2fa00826abbd20f0909e47c699acc6a66599bd6713ebfba17c0ab75f4982a2e4684c1a535bf1c30b76fb07686aeaf3df2ec74b7e7ce2b0c8a936168e6e64ce66bda2d1269a5fdcee2712f76f9b71935b1fb0995ec6f338f223cb1c71ef42cac64abc0f89049c5007ea801202c2a627f1afafdd0482e17bc18dca74893b76dd61daf4abcc39383661bbd49d1f6023f"
-		"EncryptedTicket"		"0a2031b10586103004f6289ec62c088578e9f2404c936dbfb0ae36d50195c4efb4341280027f403d3b6ca9180ac1d7a19cfedd92a9dd7608581bedcab51344762f0cc9a4888ba3d7663953911976a8cddb18c787fcda501e198e35e657128d91af148700dff37f5f8ef7d886bc6e6b969bc0fb495bae4c02635c9ceff859d7db3a54b05fa4bf472f5a6a8c9e328724825943704b0154e2fa00826abbd20f0909e47c699acc6a66599bd6713ebfba17c0ab75f4982a2e4684c1a535bf1c30b76fb07686aeaf3df2ec74b7e7ce2b0c8a936168e6e64ce66bda2d1269a5fdcee2712f76f9b71935b1fb0995ec6f338f223cb1c71ef42cac64abc0f89049c5007ea801202c2a627f1afafdd0482e17bc18dca74893b76dd61daf4abcc39383661bbd49d1f6023f18062208a48974b2496c6ac528043208117f08da28f4e48e"
-		"EncryptedSignature"		"7f403d3b6ca9180ac1d7a19cfedd92a9dd7608581bedcab51344762f0cc9a4888ba3d7663953911976a8cddb18c787fcda501e198e35e657128d91af148700dff37f5f8ef7d886bc6e6b969bc0fb495bae4c02635c9ceff859d7db3a54b05fa4bf472f5a6a8c9e328724825943704b0154e2fa00826abbd20f0909e47c699acc6a66599bd6713ebfba17c0ab75f4982a2e4684c1a535bf1c30b76fb07686aeaf3df2ec74b7e7ce2b0c8a936168e6e64ce66bda2d1269a5fdcee2712f76f9b71935b1fb0995ec6f338f223cb1c71ef42cac64abc0f89049c5007ea801202c2a627f1afafdd0482e17bc18dca74893b76dd61daf4abcc39383661bbd49d1f6023f"
+		"Ticket"		"0892a6f4d604151780d46a"
+		"Signature"		"1d933afcbb6486897556bffc53500c6dd0ebd67f88ce6ecfa778e04241d9d4596aaabf565ae8f2be62540b92a827cae5c950acb3a3d2c17a5fc564bc68ee562dac3dc434c4802dcef2887ac38c6c84638f23227f474c9720a5a513796c4c23509f893ab42e72ce5fa36652ed484ad32f2f1c01c967682849ebcf375b0386c6812b0ac96160e3e68410fa116ebb5a7c4283f89a5b24c2487df38d2756d378a55c26ff367497ae135fb41928edde4f7e8924150af37cb4c19a221b98d64606c8a170ed3a68e701b71f9fef2c4702ac50ab87e6ea799ce5b9a9782739deeaf6a5992a2591895ce81aa1fd98fd8a4096cfe5a477dc02d3ef55f52635c94be578b6f8"
+		"EncryptedTicket"		"0a207bbc67628a50a19381766c0b9a20c9a689068ae7ae30bc0da3946f99e4f3e08f1280021d933afcbb6486897556bffc53500c6dd0ebd67f88ce6ecfa778e04241d9d4596aaabf565ae8f2be62540b92a827cae5c950acb3a3d2c17a5fc564bc68ee562dac3dc434c4802dcef2887ac38c6c84638f23227f474c9720a5a513796c4c23509f893ab42e72ce5fa36652ed484ad32f2f1c01c967682849ebcf375b0386c6812b0ac96160e3e68410fa116ebb5a7c4283f89a5b24c2487df38d2756d378a55c26ff367497ae135fb41928edde4f7e8924150af37cb4c19a221b98d64606c8a170ed3a68e701b71f9fef2c4702ac50ab87e6ea799ce5b9a9782739deeaf6a5992a2591895ce81aa1fd98fd8a4096cfe5a477dc02d3ef55f52635c94be578b6f818062208a48974b2496c6ac5280432081ecf23eaff8598b9"
+		"EncryptedSignature"		"1d933afcbb6486897556bffc53500c6dd0ebd67f88ce6ecfa778e04241d9d4596aaabf565ae8f2be62540b92a827cae5c950acb3a3d2c17a5fc564bc68ee562dac3dc434c4802dcef2887ac38c6c84638f23227f474c9720a5a513796c4c23509f893ab42e72ce5fa36652ed484ad32f2f1c01c967682849ebcf375b0386c6812b0ac96160e3e68410fa116ebb5a7c4283f89a5b24c2487df38d2756d378a55c26ff367497ae135fb41928edde4f7e8924150af37cb4c19a221b98d64606c8a170ed3a68e701b71f9fef2c4702ac50ab87e6ea799ce5b9a9782739deeaf6a5992a2591895ce81aa1fd98fd8a4096cfe5a477dc02d3ef55f52635c94be578b6f8"
 	}
 	"CloudKey"		"01000000e4cb5eae744ec73339f0bfada2f55f26872eea9f5fa2baf922d5977a1b8a6817af874c1a"
 	"CloudKeyCRC"		"-1344546566"

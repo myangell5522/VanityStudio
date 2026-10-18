@@ -24,6 +24,9 @@ namespace VanityStudio.Core
 		private bool dirty = true;
 		private Dictionary<int, int[]> emitPoints;
 
+		// cut-up copies for free-arm poses (see Players/CompositeArms), made on demand
+		internal readonly Dictionary<int, Texture2D> Pieces = new();
+
 		public bool IsPlain => !Glow && !Pulse && DyeItem <= 0;
 		public bool EmitsDust => Dust >= 0 && DustRate > 0f;
 
@@ -48,6 +51,13 @@ namespace VanityStudio.Core
 		internal void MarkDirty() {
 			dirty = true;
 			emitPoints = null;
+			ClearPieces();
+		}
+
+		private void ClearPieces() {
+			foreach (Texture2D t in Pieces.Values)
+				BakedDesign.DisposeLater(t);
+			Pieces.Clear();
 		}
 
 		// opaque pixels of one cell, for throwing dust from
@@ -70,6 +80,7 @@ namespace VanityStudio.Core
 		public void Dispose() {
 			BakedDesign.DisposeLater(texture);
 			texture = null;
+			ClearPieces();
 		}
 	}
 
