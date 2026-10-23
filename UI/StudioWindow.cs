@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.Audio;
@@ -117,6 +118,10 @@ namespace VanityStudio.UI
 				Tutorial.End();
 			DrawError(win);
 			Gui.EndFrame();
+			// leave the device the way the layers after ours (tooltips, the pointer) expect it
+			Gui.Sb.End();
+			Gui.ResetDevice();
+			Gui.Sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
 		}
 
 		// a quiet red line at the bottom of the window instead of a silent, half-drawn studio

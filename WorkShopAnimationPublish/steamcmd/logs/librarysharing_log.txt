@@ -37,3 +37,12 @@
 [2026-10-18 13:57:38] Client version: 1791918946
 [2026-10-18 13:57:38] Loaded cached family info for account 1256002322 ( groupID=7172358, name="shumi', role=1)
 [2026-10-18 13:57:43] Shared lock for app 3393110 changed : available owner 0, preferred owner 178037266, current player 178037266
+
+
+[2026-10-23 01:32:25] Client version: 1792617903
+[2026-10-23 01:32:25] Loaded cached family info for account 1256002322 ( groupID=7172358, name="shumi', role=1)
+
+
+[2026-10-23 01:33:06] Client version: 1792617903
+[2026-10-23 01:33:06] Loaded cached family info for account 1256002322 ( groupID=7172358, name="shumi', role=1)
+[2026-10-23 01:33:25] Loaded cached family info for account 1256002322 ( groupID=7172358, name="shumi', role=1)

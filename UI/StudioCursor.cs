@@ -22,6 +22,7 @@ namespace VanityStudio.UI
 			SpriteBatch sb = Main.spriteBatch;
 			// point sampling like vanilla's cursor, so the pixel art stays crisp at any cursor size
 			sb.End();
+			Gui.ResetDevice();
 			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
 
 			var at = new Vector2(Main.mouseX, Main.mouseY);

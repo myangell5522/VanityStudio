@@ -336,6 +336,7 @@ namespace VanityStudio.UI
 		#region dummy / preview
 
 		private static void MakeDummy() {
+			DummyBroken = false;
 			try {
 				Dummy = Main.LocalPlayer.SerializedClone();
 			}
@@ -440,16 +441,36 @@ namespace VanityStudio.UI
 			if (!Doc.IsWearable)
 				vp.PreviewBake = null;
 
-			using (new Main.CurrentPlayerOverride(Dummy)) {
-				Dummy.ResetEffects();
-				Dummy.ResetVisibleAccessories();
-				Dummy.UpdateMiscCounter();
-				Dummy.UpdateDyes();
-				Dummy.PlayerFrame();
-				PreviewPoseNow(out bool flying);
-				Dummy.velocity = flying ? new Vector2(0f, -2f) : Vector2.Zero;
-				Dummy.WingFrame(flying);
+			if (DummyBroken)
+				return;
+			// every mod's player hooks run on the clone here; one that can't cope with a copy mustn't take the game down
+			try {
+				using (new Main.CurrentPlayerOverride(Dummy)) {
+					Dummy.ResetEffects();
+					Dummy.ResetVisibleAccessories();
+					Dummy.UpdateMiscCounter();
+					Dummy.UpdateDyes();
+					Dummy.PlayerFrame();
+					PreviewPoseNow(out bool flying);
+					Dummy.velocity = flying ? new Vector2(0f, -2f) : Vector2.Zero;
+					Dummy.WingFrame(flying);
+				}
 			}
+			catch (Exception e) {
+				BreakDummy("updating", e);
+			}
+		}
+
+		/// <summary>
+		/// Set when another mod's code fails on the preview clone (Calamity has been seen doing this). The preview then
+		/// shows the outfit on its own instead of on the character, and nothing else in the studio is affected.
+		/// </summary>
+		internal static bool DummyBroken;
+
+		internal static void BreakDummy(string what, Exception e) {
+			if (!DummyBroken)
+				VanityStudio.Instance.Logger.Warn($"Preview character failed while {what}, showing the outfit alone from now on", e);
+			DummyBroken = true;
 		}
 	}
 }

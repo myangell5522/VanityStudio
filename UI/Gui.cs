@@ -223,7 +223,27 @@ namespace VanityStudio.UI
 				return;
 			clipping = false;
 			Sb.End();
+			ResetDevice();
 			Sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+		}
+
+		/// <summary>
+		/// Full-screen scissor and viewport. A clip rectangle left behind is harmless only while nobody turns scissor
+		/// testing back on, and some mods' UI code does, which used to hide everything outside our last clip.
+		/// </summary>
+		public static void ResetDevice() {
+			GraphicsDevice dev = Main.instance.GraphicsDevice;
+			int w = dev.PresentationParameters.BackBufferWidth, h = dev.PresentationParameters.BackBufferHeight;
+			if (dev.GetRenderTargets().Length == 0) {
+				Viewport v = dev.Viewport;
+				if (v.X != 0 || v.Y != 0 || v.Width != w || v.Height != h)
+					dev.Viewport = new Viewport(0, 0, w, h);
+			}
+			dev.ScissorRectangle = new Rectangle(0, 0, w, h);
+			// Bounce the rasterizer through a scissor state and back: the driver only touches scissor testing when it
+			// thinks the setting changed, so this resyncs it even if something flipped it behind the batch's back.
+			dev.RasterizerState = scissor;
+			dev.RasterizerState = RasterizerState.CullCounterClockwise;
 		}
 
 		#region failures
@@ -264,8 +284,7 @@ namespace VanityStudio.UI
 			catch (InvalidOperationException) {
 				// it wasn't running
 			}
-			GraphicsDevice dev = Main.instance.GraphicsDevice;
-			dev.ScissorRectangle = new Rectangle(0, 0, dev.PresentationParameters.BackBufferWidth, dev.PresentationParameters.BackBufferHeight);
+			ResetDevice();
 			Sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
 		}
 
@@ -276,20 +295,54 @@ namespace VanityStudio.UI
 		/// which is exactly how vanilla's renderer scales. With an integer scale the 40x56 frame lands on whole pixels.
 		/// </summary>
 		public static void DrawPlayer(Player p, Vector2 feet, float scale, float shadow = 0f) {
+			if (StudioState.DummyBroken)
+				return;
 			Vector2 saved = Main.screenPosition;
 			Main.screenPosition = saved.Floor();
+			Item held = p.inventory[p.selectedItem];
+			// Other mods hook the player renderer as well (Calamity does). Whatever they leave switched, render target
+			// or batch, is switched back here, and if they throw the preview falls back to the outfit alone.
+			GraphicsDevice dev = Main.instance.GraphicsDevice;
+			RenderTargetBinding[] targets = dev.GetRenderTargets();
 			try {
 				Vector2 topLeft = Main.screenPosition + new Vector2((int)feet.X - p.width / 2, (int)feet.Y - p.height);
 				p.position = topLeft;
-				Item held = p.inventory[p.selectedItem];
 				p.inventory[p.selectedItem] = blankItem;
 				using (new Main.CurrentPlayerOverride(p))
 					Main.PlayerRenderer.DrawPlayer(Main.Camera, p, topLeft, 0f, Vector2.Zero, shadow, scale);
-				p.inventory[p.selectedItem] = held;
+			}
+			catch (Exception e) {
+				StudioState.BreakDummy("drawing", e);
+				bool wasClipping = clipping;
+				Recover();
+				if (wasClipping)
+					clipping = true; // the caller's EndClip still has to run
 			}
 			finally {
+				p.inventory[p.selectedItem] = held;
 				Main.screenPosition = saved;
+				if (!SameTargets(targets, dev.GetRenderTargets())) {
+					try {
+						Sb.End();
+					}
+					catch (InvalidOperationException) {
+					}
+					dev.SetRenderTargets(targets);
+					ResetDevice();
+					Sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+					clipping = false;
+				}
 			}
+		}
+
+		private static bool SameTargets(RenderTargetBinding[] a, RenderTargetBinding[] b) {
+			if (a.Length != b.Length)
+				return false;
+			for (int i = 0; i < a.Length; i++) {
+				if (a[i].RenderTarget != b[i].RenderTarget)
+					return false;
+			}
+			return true;
 		}
 
 		#endregion

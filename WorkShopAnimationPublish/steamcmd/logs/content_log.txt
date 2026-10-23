@@ -63,3 +63,15 @@
 [2026-10-18 13:57:38] Loaded Steam library folders configuration: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamapps\libraryfolders.vdf
 [2026-10-18 13:57:38] Loaded 0 apps from install folder "C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamapps\appmanifest_*.acf".
 [2026-10-18 13:57:38] Triggered async write of Steam library folders configuration (1 libraries).
+
+
+[2026-10-23 01:32:25] Client version: 1792617903
+[2026-10-23 01:32:25] Loaded Steam library folders configuration: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamapps\libraryfolders.vdf
+[2026-10-23 01:32:25] Loaded 0 apps from install folder "C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamapps\appmanifest_*.acf".
+[2026-10-23 01:32:25] Triggered async write of Steam library folders configuration (1 libraries).
+
+
+[2026-10-23 01:33:06] Client version: 1792617903
+[2026-10-23 01:33:06] Loaded Steam library folders configuration: C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamapps\libraryfolders.vdf
+[2026-10-23 01:33:06] Loaded 0 apps from install folder "C:\Users\myangell\Documents\My Games\Terraria\tModLoader\ModSources\VanityStudio\WorkShopAnimationPublish\steamcmd\steamapps\appmanifest_*.acf".
+[2026-10-23 01:33:06] Triggered async write of Steam library folders configuration (1 libraries).

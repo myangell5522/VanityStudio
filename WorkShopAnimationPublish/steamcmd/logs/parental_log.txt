@@ -73,3 +73,13 @@
 [2026-10-18 13:57:42] 	Base list: 0 ()
 [2026-10-18 13:57:42] 	No custom list
 [2026-10-18 13:57:42] 	No enabled features
+
+
+[2026-10-23 01:33:25] Client version: 1792617903
+[2026-10-23 01:33:25] Validating parental settings
+[2026-10-23 01:33:25] Settings dump:
+[2026-10-23 01:33:25] 	Account ID: 1256002322
+[2026-10-23 01:33:25] 	Enabled: false
+[2026-10-23 01:33:25] 	Base list: 0 ()
+[2026-10-23 01:33:25] 	No custom list
+[2026-10-23 01:33:25] 	No enabled features

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using VanityStudio.Core;
+using VanityStudio.Players;
 
 namespace VanityStudio.UI
 {
@@ -77,8 +78,44 @@ namespace VanityStudio.UI
 			int pose = StudioState.PreviewPoseNow(out bool flying);
 			StudioState.SetDummyPose(pose);
 			float lift = flying ? (float)Math.Sin(Main.GlobalTimeWrappedHourly * 3f) * 4f + 12f : pose == 5 ? 14f : 0f;
+			var feet = new Vector2(stage.Center.X, stage.Bottom - 20 - lift);
+			int scale = Math.Max(2, StudioSettings.PreviewScale);
+			if (StudioState.DummyBroken) {
+				DrawOutfitOnly(stage, dummy, feet, scale, pose);
+				return;
+			}
+
 			Gui.BeginClip(stage, immediate: true);
-			Gui.DrawPlayer(dummy, new Vector2(stage.Center.X, stage.Bottom - 20 - lift), Math.Max(2, StudioSettings.PreviewScale));
+			Gui.DrawPlayer(dummy, feet, scale);
+			Gui.EndClip();
+		}
+
+		// fallback when the character can't be drawn: the worn pieces alone, stacked the way the game layers them
+		private static readonly DesignSlot[] drawOrder = { DesignSlot.Back, DesignSlot.Legs, DesignSlot.Body, DesignSlot.Front, DesignSlot.Head };
+
+		private static void DrawOutfitOnly(Rectangle stage, Player dummy, Vector2 feet, int scale, int pose) {
+			var vp = dummy.GetModPlayer<VanityPlayer>();
+			var fx = StudioState.PreviewDirection < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+			Gui.BeginClip(stage);
+			foreach (DesignSlot slot in drawOrder) {
+				BakedDesign b = vp.Drawn(slot);
+				if (b == null)
+					continue;
+				Rectangle src = b.Source(vp.FrameFor(b), pose, out bool overridden);
+				Point off = Slots.FrameOffset(slot);
+				int bob = !overridden && Slots.Bobs(slot) ? Slots.BobFor(pose) : 0;
+				// the 40x56 player frame sits with its bottom 2px below the feet, like vanilla's renderer
+				var topLeft = new Vector2(feet.X - 20 * scale - off.X * scale, feet.Y - 54 * scale - off.Y * scale + bob * scale);
+				if (fx == SpriteEffects.FlipHorizontally)
+					topLeft.X = feet.X + 20 * scale + off.X * scale - src.Width * scale;
+				foreach (BakedPass p in b.Passes) {
+					Texture2D tex = p.GetTexture(b.AtlasWidth, b.AtlasHeight);
+					if (tex == null)
+						continue;
+					Color c = p.Pulse ? Color.White * Retextures.PulseAlpha : Color.White;
+					Gui.Sb.Draw(tex, topLeft, src, c, 0f, Vector2.Zero, scale, fx, 0f);
+				}
+			}
 			Gui.EndClip();
 		}
 

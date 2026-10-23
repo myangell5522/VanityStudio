@@ -231,6 +231,15 @@ namespace VanityStudio.Players
 			BakedDesign back = Drawn(DesignSlot.Back);
 			if (back != null && back.HideVanilla)
 				PlayerDrawLayers.Wings.Hide();
+			if (!IsDummy)
+				return;
+			// The preview is a copy floating in the UI, not a real player in the world. Other mods' extra layers
+			// (Calamity's among them) expect the real thing and have broken the studio before, so the preview
+			// shows vanilla plus our own layers only.
+			foreach (PlayerDrawLayer layer in PlayerDrawLayerLoader.Layers) {
+				if (layer.Mod != null && layer.Mod != Mod && layer.Mod.Name != "ModLoader")
+					layer.Hide();
+			}
 		}
 
 		public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) {
